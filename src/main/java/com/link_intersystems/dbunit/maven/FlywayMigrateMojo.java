@@ -1,5 +1,20 @@
 package com.link_intersystems.dbunit.maven;
 
+import com.link_intersystems.dbunit.flyway.FlywayMigrationConfig;
+import com.link_intersystems.dbunit.migration.collection.DataSetCollectionFlywayMigration;
+import com.link_intersystems.dbunit.migration.resources.BasepathTargetPathSupplier;
+import com.link_intersystems.dbunit.migration.resources.DataSetFileLocationsScanner;
+import com.link_intersystems.dbunit.migration.resources.DefaultDataSetResourcesSupplier;
+import com.link_intersystems.dbunit.stream.consumer.DataSetConsumerPipeTransformerAdapter;
+import com.link_intersystems.dbunit.stream.consumer.ExternalSortTableConsumer;
+import com.link_intersystems.dbunit.stream.resource.file.DataSetFileDetection;
+import com.link_intersystems.dbunit.table.DefaultTableOrder;
+import com.link_intersystems.dbunit.table.TableOrder;
+import com.link_intersystems.dbunit.testcontainers.DatabaseContainerSupport;
+import com.link_intersystems.dbunit.testcontainers.DatabaseContainerSupportFactory;
+import com.link_intersystems.io.FilePath;
+import com.link_intersystems.io.FileScanner;
+import org.apache.maven.model.Build;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -7,9 +22,13 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
+import org.flywaydb.core.api.configuration.FluentConfiguration;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author René Link {@literal <rene.link@link-intersystems.com>}
@@ -25,6 +44,15 @@ public class FlywayMigrateMojo extends AbstractMojo {
      */
     @Parameter
     private File dataSetBaseDirectory;
+
+    @Parameter
+    private File[] flywayLocations;
+
+    @Parameter(defaultValue = "${project.build.directory}")
+    private File targetFolder;
+
+    @Parameter
+    private Flyway flyway = new Flyway();
 
     public File getBaseDirectory() {
         if (dataSetBaseDirectory == null) {
@@ -43,6 +71,69 @@ public class FlywayMigrateMojo extends AbstractMojo {
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
+
+
         File baseDirectory = getBaseDirectory();
+
+        DataSetCollectionFlywayMigration flywayMigration = new DataSetCollectionFlywayMigration();
+
+        DataSetFileLocationsScanner fileLocations = new DataSetFileLocationsScanner(baseDirectory.toPath());
+
+        DefaultDataSetResourcesSupplier dataSetResourcesSupplier = new DefaultDataSetResourcesSupplier(fileLocations, new DataSetFileDetection());
+        flywayMigration.setDataSetResourcesSupplier(dataSetResourcesSupplier);
+
+        DatabaseContainerSupport containerSupport = DatabaseContainerSupportFactory.INSTANCE.createPostgres("postgres:latest");
+        flywayMigration.setDatabaseContainerSupport(containerSupport);
+
+
+        Path targetPath = targetFolder.toPath();
+
+        BasepathTargetPathSupplier basepathTargetPathSupplier = new BasepathTargetPathSupplier(baseDirectory.toPath(), targetPath);
+        flywayMigration.setTargetDataSetFileSupplier(basepathTargetPathSupplier);
+
+        FlywayMigrationConfig migrationConfig = createFlywayMigrationConfig();
+        flywayMigration.setMigrationConfig(migrationConfig);
+        flywayMigration.setMigrationListener(new MavenLogAdapter(getLog()));
+
+        TableOrder tableOrder = new DefaultTableOrder("language", "film", "actor", "film_actor");
+        ExternalSortTableConsumer externalSortTableConsumer = new ExternalSortTableConsumer(tableOrder);
+        flywayMigration.setBeforeMigration(new DataSetConsumerPipeTransformerAdapter(externalSortTableConsumer));
+
+        flywayMigration.exec();
+
     }
+
+    Flyway getFlywayConfig() {
+        return flyway;
+    }
+
+    private FlywayMigrationConfig createFlywayMigrationConfig() {
+        FlywayMigrationConfig migrationConfig = new FlywayMigrationConfig();
+        FluentConfiguration configure = org.flywaydb.core.Flyway.configure();
+
+        configure.locations(guessFlywayLocations());
+        Map<String, String> placeholderMap = getFlywayConfig().getPlaceholderMap();
+        configure.placeholders(placeholderMap);
+
+        migrationConfig.setFlywayConfiguration(configure);
+        migrationConfig.setSourceVersion("1");
+        return migrationConfig;
+    }
+
+    private String[] guessFlywayLocations() {
+
+        List<FilePath> filePaths = new ArrayList<>();
+        Build build = project.getBuild();
+        List<Resource> resources = build.getResources();
+        for (Resource resource : resources) {
+            String directory = resource.getDirectory();
+            FileScanner fileScanner = new FileScanner(new File(directory));
+            fileScanner.addIncludeDirectoryPatterns("**/db/migration", "db/migration");
+            filePaths.addAll(fileScanner.scan());
+        }
+
+        return filePaths.stream().map(FilePath::toAbsolutePath).map(Path::toString).map(s -> "filesystem:".concat(s)).toArray(String[]::new);
+    }
+
+
 }
