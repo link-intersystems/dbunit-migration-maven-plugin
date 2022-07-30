@@ -22,13 +22,11 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
-import org.flywaydb.core.api.configuration.FluentConfiguration;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author René Link {@literal <rene.link@link-intersystems.com>}
@@ -71,8 +69,6 @@ public class FlywayMigrateMojo extends AbstractMojo {
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
-
-
         File baseDirectory = getBaseDirectory();
 
         DataSetCollectionFlywayMigration flywayMigration = new DataSetCollectionFlywayMigration();
