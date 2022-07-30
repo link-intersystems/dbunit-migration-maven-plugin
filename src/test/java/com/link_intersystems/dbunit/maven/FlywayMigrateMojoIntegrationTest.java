@@ -1,6 +1,5 @@
 package com.link_intersystems.dbunit.maven;
 
-import org.apache.maven.project.MavenProject;
 import org.dbunit.dataset.DataSetException;
 import org.junit.jupiter.api.Test;
 
@@ -13,9 +12,7 @@ class FlywayMigrateMojoIntegrationTest extends AbstractMinimalMigrationConfigura
 
     @Test
     void execute() throws Exception {
-        MavenProject mavenProject = getMavenProject();
-
-        FlywayMigrateMojo mojo = (FlywayMigrateMojo) lookupConfiguredMojo(mavenProject, "flyway-migrate");
+        FlywayMigrateMojo mojo = lookupConfiguredMojo("flyway-migrate");
 
         mojo.execute();
 

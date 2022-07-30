@@ -1,6 +1,5 @@
 package com.link_intersystems.dbunit.maven;
 
-import org.apache.maven.project.MavenProject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -14,9 +13,7 @@ class FlywayMigrateMojoParameterTest extends AbstractMinimalMigrationConfigurati
 
     @Test
     void execute() throws Exception {
-        MavenProject mavenProject = getMavenProject();
-
-        FlywayMigrateMojo mojo = (FlywayMigrateMojo) lookupConfiguredMojo(mavenProject, "flyway-migrate");
+        FlywayMigrateMojo mojo = lookupConfiguredMojo("flyway-migrate");
 
         FlywayConfig flywayConfig = mojo.getFlywayConfig();
         Map<String, String> placeholderMap = flywayConfig.getPlaceholderMap();

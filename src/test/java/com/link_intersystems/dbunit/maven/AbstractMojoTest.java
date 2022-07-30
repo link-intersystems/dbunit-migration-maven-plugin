@@ -21,7 +21,7 @@ import java.nio.file.Path;
  */
 public abstract class AbstractMojoTest {
 
-    private class AbstractMojoTestCaseAdapter extends AbstractMojoTestCase {
+    private static class MojoTestCaseAdapter extends AbstractMojoTestCase {
         @Override
         public void setUp() throws Exception {
             super.setUp();
@@ -42,9 +42,7 @@ public abstract class AbstractMojoTest {
         }
     }
 
-    ;
-
-    private AbstractMojoTestCaseAdapter testCaseAdapter = new AbstractMojoTestCaseAdapter();
+    private MojoTestCaseAdapter testCaseAdapter = new MojoTestCaseAdapter();
 
     private TestMavenProject testMavenProject;
     private MavenSession mavenSession;
@@ -83,14 +81,16 @@ public abstract class AbstractMojoTest {
 
     protected abstract TestMavenProject createTestMavenProject(Path basepath);
 
-    protected Mojo lookupConfiguredMojo(MavenProject project, String goal) throws Exception {
-        Mojo mojo = testCaseAdapter.lookupConfiguredMojo(project, goal);
+    @SuppressWarnings("unchecked")
+    protected <T extends Mojo> T lookupConfiguredMojo(String goal) throws Exception {
+        MavenProject mavenProject = getMavenProject();
+        Mojo mojo = testCaseAdapter.lookupConfiguredMojo(mavenProject, goal);
         mojo.setLog(new SystemStreamLog() {
             @Override
             public boolean isDebugEnabled() {
                 return true;
             }
         });
-        return mojo;
+        return (T) mojo;
     }
 }
