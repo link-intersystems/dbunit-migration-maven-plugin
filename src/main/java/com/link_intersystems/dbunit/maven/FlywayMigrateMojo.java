@@ -52,7 +52,7 @@ public class FlywayMigrateMojo extends AbstractMojo {
     private File targetFolder;
 
     @Parameter
-    private Flyway flyway = new Flyway();
+    private FlywayConfig flyway = new FlywayConfig();
 
     public File getBaseDirectory() {
         if (dataSetBaseDirectory == null) {
@@ -103,21 +103,14 @@ public class FlywayMigrateMojo extends AbstractMojo {
 
     }
 
-    Flyway getFlywayConfig() {
+    FlywayConfig getFlywayConfig() {
         return flyway;
     }
 
     private FlywayMigrationConfig createFlywayMigrationConfig() {
-        FlywayMigrationConfig migrationConfig = new FlywayMigrationConfig();
-        FluentConfiguration configure = org.flywaydb.core.Flyway.configure();
+        FlywayConfig flywayConfig = getFlywayConfig();
+        return flywayConfig.createFlywayMigrationConfig(this::guessFlywayLocations);
 
-        configure.locations(guessFlywayLocations());
-        Map<String, String> placeholderMap = getFlywayConfig().getPlaceholderMap();
-        configure.placeholders(placeholderMap);
-
-        migrationConfig.setFlywayConfiguration(configure);
-        migrationConfig.setSourceVersion("1");
-        return migrationConfig;
     }
 
     private String[] guessFlywayLocations() {
