@@ -3,30 +3,27 @@ package com.link_intersystems.dbunit.maven;
 import com.link_intersystems.dbunit.flyway.FlywayMigrationConfig;
 import com.link_intersystems.dbunit.migration.collection.DataSetCollectionFlywayMigration;
 import com.link_intersystems.dbunit.migration.resources.BasepathTargetPathSupplier;
-import com.link_intersystems.dbunit.migration.resources.DataSetFileLocationsScanner;
+import com.link_intersystems.dbunit.migration.resources.DataSetFileLocations;
 import com.link_intersystems.dbunit.migration.resources.DefaultDataSetResourcesSupplier;
+import com.link_intersystems.dbunit.migration.resources.TargetDataSetResourceSupplier;
 import com.link_intersystems.dbunit.stream.consumer.DataSetConsumerPipeTransformerAdapter;
+import com.link_intersystems.dbunit.stream.consumer.DataSetTransormer;
 import com.link_intersystems.dbunit.stream.consumer.ExternalSortTableConsumer;
 import com.link_intersystems.dbunit.stream.resource.file.DataSetFileDetection;
 import com.link_intersystems.dbunit.table.DefaultTableOrder;
 import com.link_intersystems.dbunit.table.TableOrder;
 import com.link_intersystems.dbunit.testcontainers.DatabaseContainerSupport;
-import com.link_intersystems.dbunit.testcontainers.DatabaseContainerSupportFactory;
-import com.link_intersystems.io.FilePath;
-import com.link_intersystems.io.FileScanner;
-import org.apache.maven.model.Build;
-import org.apache.maven.model.Resource;
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugin.PluginParameterExpressionEvaluator;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluator;
 
-import java.io.File;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author René Link {@literal <rene.link@link-intersystems.com>}
@@ -35,93 +32,86 @@ import java.util.List;
 public class FlywayMigrateMojo extends AbstractMojo {
 
     @Parameter(property = "project", readonly = true, required = true)
-    private MavenProject project;
+    protected MavenProject project;
+
+    @Parameter(property = "mojoExecution", readonly = true, required = true)
+    protected MojoExecution mojoExecution;
 
     /**
-     * Defaults to the first test resources' directory.
+     * The Maven Session.
      */
-    @Parameter
-    private File dataSetBaseDirectory;
+    @Parameter(defaultValue = "${session}")
+    protected MavenSession mavenSession;
 
     @Parameter
-    private File[] flywayLocations;
-
-    @Parameter(defaultValue = "${project.build.directory}")
-    private File targetFolder;
+    protected FlywayConfig flyway = new FlywayConfig();
 
     @Parameter
-    private FlywayConfig flyway = new FlywayConfig();
+    protected DataSetConfig dataSets = new DataSetConfig();
 
-    public File getBaseDirectory() {
-        if (dataSetBaseDirectory == null) {
-            List<Resource> testResources = project.getTestResources();
-            if (testResources.isEmpty()) {
-                throw new RuntimeException("dataSetBaseDirectory can not be resolved, because no test resources exist.");
-            }
-
-            Resource resource = testResources.get(0);
-            String directory = resource.getDirectory();
-            return new File(directory);
-        }
-
-        return dataSetBaseDirectory;
-    }
+    @Parameter
+    protected String dockerImageName;
 
     @Override
-    public void execute() throws MojoExecutionException, MojoFailureException {
-        File baseDirectory = getBaseDirectory();
+    public void execute() throws MojoExecutionException {
+        if (dockerImageName == null) {
+            throw new MojoExecutionException("dockerImageName must be configured.");
+        }
 
+        flyway.setProject(project);
+        dataSets.setProject(project);
+
+        ExpressionEvaluator expressionEvaluator = new PluginParameterExpressionEvaluator(mavenSession, mojoExecution);
+        dataSets.setExpressionEvaluator(expressionEvaluator);
+
+
+        executeMigration();
+    }
+
+    protected void executeMigration() {
         DataSetCollectionFlywayMigration flywayMigration = new DataSetCollectionFlywayMigration();
 
-        DataSetFileLocationsScanner fileLocations = new DataSetFileLocationsScanner(baseDirectory.toPath());
+        DataSetFileLocations dataSetFileLocations = dataSets.getDataSetFileLocations();
 
-        DefaultDataSetResourcesSupplier dataSetResourcesSupplier = new DefaultDataSetResourcesSupplier(fileLocations, new DataSetFileDetection());
+        DefaultDataSetResourcesSupplier dataSetResourcesSupplier = new DefaultDataSetResourcesSupplier(dataSetFileLocations, new DataSetFileDetection());
         flywayMigration.setDataSetResourcesSupplier(dataSetResourcesSupplier);
 
-        DatabaseContainerSupport containerSupport = DatabaseContainerSupportFactory.INSTANCE.createPostgres("postgres:latest");
+        DatabaseContainerSupport containerSupport = DatabaseContainerSupport.getDatabaseContainerSupport(dockerImageName);
         flywayMigration.setDatabaseContainerSupport(containerSupport);
 
 
-        Path targetPath = targetFolder.toPath();
+        flywayMigration.setTargetDataSetResourceSupplier(getTargetDataSetResourceSupplier(dataSets));
+        flywayMigration.setMigrationConfig(getFlywayMigrationConfig());
+        flywayMigration.setMigrationListener(getMigrationListener());
+        flywayMigration.setBeforeMigration(getBeforeMigrationTransformer());
 
-        BasepathTargetPathSupplier basepathTargetPathSupplier = new BasepathTargetPathSupplier(baseDirectory.toPath(), targetPath);
-        flywayMigration.setTargetDataSetFileSupplier(basepathTargetPathSupplier);
-
-        FlywayMigrationConfig migrationConfig = createFlywayMigrationConfig();
-        flywayMigration.setMigrationConfig(migrationConfig);
-        flywayMigration.setMigrationListener(new MavenLogAdapter(getLog()));
-
-        TableOrder tableOrder = new DefaultTableOrder("language", "film", "actor", "film_actor");
-        ExternalSortTableConsumer externalSortTableConsumer = new ExternalSortTableConsumer(tableOrder);
-        flywayMigration.setBeforeMigration(new DataSetConsumerPipeTransformerAdapter(externalSortTableConsumer));
 
         flywayMigration.exec();
-
     }
 
-    FlywayConfig getFlywayConfig() {
-        return flyway;
-    }
-
-    private FlywayMigrationConfig createFlywayMigrationConfig() {
-        FlywayConfig flywayConfig = getFlywayConfig();
-        return flywayConfig.createFlywayMigrationConfig(this::guessFlywayLocations);
-
-    }
-
-    private String[] guessFlywayLocations() {
-
-        List<FilePath> filePaths = new ArrayList<>();
-        Build build = project.getBuild();
-        List<Resource> resources = build.getResources();
-        for (Resource resource : resources) {
-            String directory = resource.getDirectory();
-            FileScanner fileScanner = new FileScanner(new File(directory));
-            fileScanner.addIncludeDirectoryPatterns("**/db/migration", "db/migration");
-            filePaths.addAll(fileScanner.scan());
+    protected DataSetTransormer getBeforeMigrationTransformer() {
+        String[] tableOrderConfig = dataSets.getTableOrder();
+        if (tableOrderConfig != null) {
+            TableOrder tableOrder = new DefaultTableOrder(tableOrderConfig);
+            ExternalSortTableConsumer externalSortTableConsumer = new ExternalSortTableConsumer(tableOrder);
+            return new DataSetConsumerPipeTransformerAdapter(externalSortTableConsumer);
         }
+        return null;
+    }
 
-        return filePaths.stream().map(FilePath::toAbsolutePath).map(Path::toString).map(s -> "filesystem:".concat(s)).toArray(String[]::new);
+    protected MavenLogAdapter getMigrationListener() {
+        return new MavenLogAdapter(getLog());
+    }
+
+    protected TargetDataSetResourceSupplier getTargetDataSetResourceSupplier(DataSetConfig dataSets) {
+        Path basepath = dataSets.getBasepath();
+        Path targetPath = dataSets.getTargetBasepath();
+        return new BasepathTargetPathSupplier(basepath, targetPath);
+    }
+
+    protected FlywayMigrationConfig getFlywayMigrationConfig() {
+        return flyway.getFlywayMigrationConfig();
+
     }
 
 

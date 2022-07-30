@@ -15,15 +15,14 @@ class FlywayMigrateMojoParameterTest extends AbstractMinimalMigrationConfigurati
     void execute() throws Exception {
         FlywayMigrateMojo mojo = lookupConfiguredMojo("flyway-migrate");
 
-        FlywayConfig flywayConfig = mojo.getFlywayConfig();
-        Map<String, String> placeholderMap = flywayConfig.getPlaceholderMap();
+        Map<String, String> placeholderMap = mojo.flyway.getPlaceholderMap();
 
 
         Map<String, String> expectedPlaceholders = new HashMap<>();
         expectedPlaceholders.put("new_first_name_column_name", "firstname");
         expectedPlaceholders.put("new_last_name_column_name", "lastname");
 
-        Assertions.assertNull(flywayConfig.getLocations());
+        Assertions.assertNull(mojo.flyway.getLocations());
 
         Assertions.assertEquals(expectedPlaceholders, placeholderMap);
 

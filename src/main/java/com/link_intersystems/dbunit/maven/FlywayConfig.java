@@ -1,21 +1,34 @@
 package com.link_intersystems.dbunit.maven;
 
 import com.link_intersystems.dbunit.flyway.FlywayMigrationConfig;
+import com.link_intersystems.io.FilePath;
+import com.link_intersystems.io.FileScanner;
+import org.apache.maven.model.Build;
+import org.apache.maven.model.Resource;
+import org.apache.maven.project.MavenProject;
 import org.flywaydb.core.api.configuration.FluentConfiguration;
 
+import java.io.File;
+import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
-import java.util.function.Supplier;
+
+import static java.util.Arrays.stream;
 
 /**
  * @author René Link {@literal <rene.link@link-intersystems.com>}
  */
 public class FlywayConfig {
 
+    public static final String[] DEFAULT_FLYWAY_LOCATIONS = {"**/db/migration", "db/migration"};
+
     private Map<String, String> placeholders;
     private String sourceVersion;
     private String targetVersion;
     private String[] locations;
+    private MavenProject project;
 
     public void setPlaceholders(Map<String, String> placeholders) {
         this.placeholders = placeholders;
@@ -53,21 +66,50 @@ public class FlywayConfig {
         this.locations = locations;
     }
 
-    public FlywayMigrationConfig createFlywayMigrationConfig(Supplier<String[]> defaultLocationsSupplier) {
+    public FlywayMigrationConfig getFlywayMigrationConfig() {
         FlywayMigrationConfig migrationConfig = new FlywayMigrationConfig();
         FluentConfiguration configure = org.flywaydb.core.Flyway.configure();
 
         String[] locations = getLocations();
-        if (locations == null) {
-            locations = defaultLocationsSupplier.get();
-        }
-        configure.locations(locations);
+        String[] effectiveLocations = stream(locations)
+                .map(this::ensureFlywayFilesystemPrefix)
+                .toArray(String[]::new);
+        configure.locations(effectiveLocations);
         Map<String, String> placeholderMap = getPlaceholderMap();
         configure.placeholders(placeholderMap);
 
         migrationConfig.setFlywayConfiguration(configure);
         migrationConfig.setSourceVersion("1");
         return migrationConfig;
+    }
+
+    private String ensureFlywayFilesystemPrefix(String location) {
+        return "filesystem:".concat(location);
+    }
+
+    public void setProject(MavenProject project) {
+        this.project = project;
+
+        if (locations == null) {
+            locations = guessFlywayLocations(project);
+        }
+    }
+
+    protected String[] guessFlywayLocations(MavenProject project) {
+        List<FilePath> filePaths = new ArrayList<>();
+        Build build = project.getBuild();
+        List<Resource> resources = build.getResources();
+        for (Resource resource : resources) {
+            String directory = resource.getDirectory();
+            FileScanner fileScanner = new FileScanner(new File(directory));
+            fileScanner.addIncludeDirectoryPatterns(DEFAULT_FLYWAY_LOCATIONS);
+            filePaths.addAll(fileScanner.scan());
+        }
+
+        return filePaths.stream()
+                .map(FilePath::toAbsolutePath)
+                .map(Path::toString)
+                .toArray(String[]::new);
     }
 }
 
