@@ -10,13 +10,13 @@ import java.util.Arrays;
  */
 public class DataSetsConfig {
 
-    private String[] resources;
+    private String[] resources = new String[0];
     private boolean defaultResources;
     private File sourceBasedir;
     private String[] tableOrder;
     private File targetBasedir;
     private boolean columnSensing;
-    private String charset;
+    private String charset = "UTF-8";
 
     public boolean isColumnSensing() {
         return columnSensing;
@@ -27,7 +27,7 @@ public class DataSetsConfig {
     }
 
     public boolean isDefaultResources() {
-        return defaultResources;
+        return defaultResources || resources.length == 0;
     }
 
     public void setDefaultResources(boolean defaultResources) {

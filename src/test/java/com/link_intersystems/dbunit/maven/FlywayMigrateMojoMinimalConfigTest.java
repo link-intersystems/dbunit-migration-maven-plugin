@@ -5,11 +5,17 @@ import org.dbunit.dataset.DataSetException;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.nio.file.Path;
 
 /**
  * @author René Link {@literal <rene.link@link-intersystems.com>}
  */
-class FlywayMigrateMojoIntegrationTest extends AbstractMinimalMigrationConfigurationTest {
+class FlywayMigrateMojoMinimalConfigTest extends AbstractMojoTest {
+
+    @Override
+    protected TestMavenProject createTestMavenProject(Path basepath) {
+        return new TestMavenProject(basepath, "minimal-migration-configuration.zip");
+    }
 
     @Test
     void execute() throws Exception {

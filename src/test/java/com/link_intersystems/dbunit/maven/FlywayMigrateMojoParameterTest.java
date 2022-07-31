@@ -2,6 +2,7 @@ package com.link_intersystems.dbunit.maven;
 
 import org.junit.jupiter.api.Test;
 
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,7 +12,12 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 /**
  * @author René Link {@literal <rene.link@link-intersystems.com>}
  */
-class FlywayMigrateMojoParameterTest extends AbstractMinimalMigrationConfigurationTest {
+class FlywayMigrateMojoParameterTest extends AbstractMojoTest {
+
+    @Override
+    protected TestMavenProject createTestMavenProject(Path basepath) {
+        return new TestMavenProject(basepath, "minimal-migration-configuration.zip");
+    }
 
     @Test
     void execute() throws Exception {
@@ -27,4 +33,5 @@ class FlywayMigrateMojoParameterTest extends AbstractMinimalMigrationConfigurati
 
         assertEquals(expectedPlaceholders, placeholderMap);
     }
+
 }
