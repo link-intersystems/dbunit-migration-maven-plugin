@@ -1,8 +1,9 @@
 package com.link_intersystems.dbunit.maven;
 
 import com.link_intersystems.dbunit.stream.consumer.CopyDataSetConsumer;
-import com.link_intersystems.dbunit.stream.producer.DataSetProducerSupport;
-import com.link_intersystems.dbunit.stream.producer.DefaultDataSetProducerSupport;
+import com.link_intersystems.dbunit.stream.resource.file.DataSetFile;
+import com.link_intersystems.dbunit.stream.resource.file.DataSetFileConfig;
+import com.link_intersystems.dbunit.stream.resource.file.DataSetFileDetection;
 import com.link_intersystems.io.Unzip;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
@@ -17,12 +18,18 @@ import java.nio.file.Path;
  */
 public class TestMavenProject {
 
+    DataSetFileDetection dataSetFileDetection = new DataSetFileDetection();
+
     private Path basepath;
     private String resourcePath;
 
     public TestMavenProject(Path basepath, String resourcePath) {
         this.basepath = basepath;
         this.resourcePath = resourcePath;
+    }
+
+    public void setDataSetFileConfig(DataSetFileConfig dataSetFileConfig){
+        dataSetFileDetection.setDataSetFileConfig(dataSetFileConfig);
     }
 
     public void create() {
@@ -50,24 +57,12 @@ public class TestMavenProject {
         return basepath;
     }
 
-    public void assertFlatXml(String dataSetPathname, DataSetAssertion dataSetAssertion) throws IOException, DataSetException {
-        assertDataSet(dataSetPathname, DataSetProducerSupport::setFlatXmlProducer, dataSetAssertion);
-    }
-
-    public void assertXml(String dataSetPathname, DataSetAssertion dataSetAssertion) throws IOException, DataSetException {
-        assertDataSet(dataSetPathname, DataSetProducerSupport::setXmlProducer, dataSetAssertion);
-    }
-
-    public void assertCsv(String dataSetPathname, DataSetAssertion dataSetAssertion) throws IOException, DataSetException {
-        assertDataSet(dataSetPathname, DataSetProducerSupport::setCsvProducer, dataSetAssertion);
-    }
-
-    public void assertDataSet(String dataSetPathname, DataSetProducerSupportMethod producerMethod, DataSetAssertion dataSetAssertion) throws IOException, DataSetException {
+    public void assertDataSet(String dataSetPathname, DataSetAssertion dataSetAssertion) throws IOException, DataSetException {
         Path basepath = getBasepath();
         Path dataSetPath = basepath.resolve(dataSetPathname);
-        DefaultDataSetProducerSupport producerSupport = new DefaultDataSetProducerSupport();
-        producerMethod.setFile(producerSupport, dataSetPath.toFile());
-        IDataSetProducer dataSetProducer = producerSupport.getDataSetProducer();
+
+        DataSetFile dataSetFile = dataSetFileDetection.detect(dataSetPath.toFile());
+        IDataSetProducer dataSetProducer = dataSetFile.createProducer();
 
         CopyDataSetConsumer copyDataSetConsumer = new CopyDataSetConsumer();
         dataSetProducer.setConsumer(copyDataSetConsumer);

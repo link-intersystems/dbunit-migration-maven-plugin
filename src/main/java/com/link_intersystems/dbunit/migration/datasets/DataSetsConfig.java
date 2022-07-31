@@ -1,6 +1,7 @@
 package com.link_intersystems.dbunit.migration.datasets;
 
 import java.io.File;
+import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.Arrays;
 
@@ -14,6 +15,16 @@ public class DataSetsConfig {
     private File sourceBasedir;
     private String[] tableOrder;
     private File targetBasedir;
+    private boolean columnSensing;
+    private String charset;
+
+    public void setColumnSensing(boolean columnSensing) {
+        this.columnSensing = columnSensing;
+    }
+
+    public boolean isColumnSensing() {
+        return columnSensing;
+    }
 
     public boolean isDefaultResources() {
         return defaultResources;
@@ -74,5 +85,13 @@ public class DataSetsConfig {
         return Arrays.stream(resources)
                 .filter(r -> !r.startsWith("glob:"))
                 .toArray(String[]::new);
+    }
+
+    public Charset getCharset() {
+        return Charset.forName(charset);
+    }
+
+    public void setCharset(Charset charset) {
+        this.charset = charset.name();
     }
 }

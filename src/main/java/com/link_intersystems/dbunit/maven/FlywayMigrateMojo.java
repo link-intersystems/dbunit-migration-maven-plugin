@@ -75,6 +75,8 @@ public class FlywayMigrateMojo extends AbstractMojo {
         DataSetFileDetection fileDetection = new DataSetFileDetection();
         DataSetFileConfig config = new DataSetFileConfig();
         fileDetection.setDataSetFileConfig(config);
+        config.setCharset(dataSets.getCharset());
+        config.setColumnSensing(dataSets.isColumnSensing());
         DefaultDataSetResourcesSupplier dataSetResourcesSupplier = new DefaultDataSetResourcesSupplier(dataSetFileLocations, fileDetection);
         flywayMigration.setDataSetResourcesSupplier(dataSetResourcesSupplier);
 
