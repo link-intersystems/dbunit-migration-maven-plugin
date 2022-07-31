@@ -1,7 +1,6 @@
 package com.link_intersystems.dbunit.maven;
 
 import com.link_intersystems.dbunit.flyway.FlywayMigrationConfig;
-import com.link_intersystems.io.FilePath;
 import com.link_intersystems.io.FileScanner;
 import org.apache.maven.model.Build;
 import org.apache.maven.model.Resource;
@@ -9,7 +8,6 @@ import org.apache.maven.project.MavenProject;
 import org.flywaydb.core.api.configuration.FluentConfiguration;
 
 import java.io.File;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -28,7 +26,6 @@ public class FlywayConfig {
     private String sourceVersion;
     private String targetVersion;
     private String[] locations;
-    private MavenProject project;
 
     public void setPlaceholders(Map<String, String> placeholders) {
         this.placeholders = placeholders;
@@ -88,27 +85,26 @@ public class FlywayConfig {
     }
 
     public void setProject(MavenProject project) {
-        this.project = project;
-
         if (locations == null) {
             locations = guessFlywayLocations(project);
         }
     }
 
     protected String[] guessFlywayLocations(MavenProject project) {
-        List<FilePath> filePaths = new ArrayList<>();
+        List<File> files = new ArrayList<>();
         Build build = project.getBuild();
         List<Resource> resources = build.getResources();
+
+        FileScanner fileScanner = new FileScanner();
+        fileScanner.addIncludeDirectoryPatterns(DEFAULT_FLYWAY_LOCATIONS);
+
         for (Resource resource : resources) {
             String directory = resource.getDirectory();
-            FileScanner fileScanner = new FileScanner(new File(directory));
-            fileScanner.addIncludeDirectoryPatterns(DEFAULT_FLYWAY_LOCATIONS);
-            filePaths.addAll(fileScanner.scan());
+            files.addAll(fileScanner.scan(new File(directory)));
         }
 
-        return filePaths.stream()
-                .map(FilePath::toAbsolutePath)
-                .map(Path::toString)
+        return files.stream()
+                .map(File::getAbsolutePath)
                 .toArray(String[]::new);
     }
 }

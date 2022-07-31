@@ -2,7 +2,6 @@ package com.link_intersystems.dbunit.maven;
 
 import com.link_intersystems.dbunit.migration.resources.DataSetFileLocations;
 import com.link_intersystems.dbunit.migration.resources.DefaultDataSetFileLocations;
-import com.link_intersystems.io.FilePath;
 import com.link_intersystems.io.FileScanner;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -12,7 +11,6 @@ import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluator
 
 import java.io.File;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -107,11 +105,11 @@ public class DataSetConfig {
 
 
     public DataSetFileLocations getDataSetFileLocations() {
-        Set<Path> uniquePaths = new HashSet<>();
+        Set<String> uniqueFiles = new HashSet<>();
         DefaultDataSetFileLocations fileLocations = new DefaultDataSetFileLocations();
 
-        File sourceBasedir = getSourceBasedir();
-        FileScanner fileScanner = new FileScanner(sourceBasedir);
+
+        FileScanner fileScanner = new FileScanner();
         String[] patternResources = getPatternResources();
         fileScanner.addIncludeFilePattern(patternResources);
         if (isDefaultResources()) {
@@ -125,21 +123,21 @@ public class DataSetConfig {
             );
         }
 
-
-        List<FilePath> scannedResources = fileScanner.scan();
-        for (FilePath scannedResource : scannedResources) {
-            if (uniquePaths.add(scannedResource.toAbsolutePath())) {
+        File sourceBasedir = getSourceBasedir();
+        List<File> scannedResources = fileScanner.scan(sourceBasedir);
+        for (File scannedResource : scannedResources) {
+            if (uniqueFiles.add(scannedResource.getAbsolutePath())) {
                 fileLocations.add(scannedResource);
             }
         }
 
         String[] nonPatternResources = getNonPatternResources();
-        Path basepath = project.getBasedir().toPath();
+        File basedir = project.getBasedir();
         for (String nonPatternResource : nonPatternResources) {
-            FilePath filePath = new FilePath(basepath, Paths.get(nonPatternResource));
+            File nonPatternFile = new File(basedir, nonPatternResource);
 
-            if (uniquePaths.add(filePath.toAbsolutePath())) {
-                fileLocations.add(filePath);
+            if (uniqueFiles.add(nonPatternFile.getAbsolutePath())) {
+                fileLocations.add(nonPatternFile);
             }
         }
 
