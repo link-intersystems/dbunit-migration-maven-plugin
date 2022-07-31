@@ -34,7 +34,7 @@ public class DockerContainerConfig extends AbstractValueSource {
     @Override
     public Object getValue(String expression) {
         if (expression.startsWith("env.")) {
-            String envName = expression.substring(0, "env.".length());
+            String envName = expression.substring("env.".length());
             Map<String, String> env = getEnv();
             return env.get(envName);
         }

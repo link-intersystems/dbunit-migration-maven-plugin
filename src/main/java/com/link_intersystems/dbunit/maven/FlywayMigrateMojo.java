@@ -1,6 +1,7 @@
 package com.link_intersystems.dbunit.maven;
 
 import com.link_intersystems.dbunit.flyway.FlywayMigrationConfig;
+import com.link_intersystems.dbunit.maven.slf4j.Slf4JMavenLogAdapter;
 import com.link_intersystems.dbunit.migration.collection.DataSetCollectionFlywayMigration;
 import com.link_intersystems.dbunit.migration.datasets.DataSetsConfig;
 import com.link_intersystems.dbunit.migration.flyway.FlywayConfig;
@@ -77,7 +78,7 @@ public class FlywayMigrateMojo extends AbstractMojo {
         DefaultDataSetResourcesSupplier dataSetResourcesSupplier = new DefaultDataSetResourcesSupplier(dataSetFileLocations, fileDetection);
         flywayMigration.setDataSetResourcesSupplier(dataSetResourcesSupplier);
 
-        DatabaseContainerSupport containerSupport = testcontainers.getDatabaseContainerSupport(getLog());
+        DatabaseContainerSupport containerSupport = testcontainers.getDatabaseContainerSupport(new Slf4JMavenLogAdapter(getLog()));
         flywayMigration.setDatabaseContainerSupport(containerSupport);
 
 

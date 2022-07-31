@@ -1,11 +1,10 @@
 package com.link_intersystems.dbunit.migration.testcontainers;
 
-import com.link_intersystems.dbunit.maven.slf4j.Slf4JMavenLogAdapter;
 import com.link_intersystems.dbunit.testcontainers.DatabaseContainerSupport;
 import com.link_intersystems.dbunit.testcontainers.DefaultDatabaseContainerSupport;
-import org.apache.maven.plugin.logging.Log;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConfig;
+import org.slf4j.Logger;
 
 import java.util.Map;
 import java.util.Properties;
@@ -33,11 +32,11 @@ public class GenericContainerConfig {
         this.dockerContainer = dockerContainer;
     }
 
-    public DatabaseContainerSupport getDatabaseContainerSupport(String image, Log log) {
+    public DatabaseContainerSupport getDatabaseContainerSupport(String image, Logger logger) {
         DefaultDatabaseContainerSupport defaultDatabaseContainerSupport = new DefaultDatabaseContainerSupport(() -> {
             GenericJdbcContainer genericJdbcContainer = new GenericJdbcContainer(image, GenericContainerConfig.this);
-            if (log != null) {
-                genericJdbcContainer.setLogger(new Slf4JMavenLogAdapter(log));
+            if (logger != null) {
+                genericJdbcContainer.setLogger(logger);
             }
             return genericJdbcContainer;
         });

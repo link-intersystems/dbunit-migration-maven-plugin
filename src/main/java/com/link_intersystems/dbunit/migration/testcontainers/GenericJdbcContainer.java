@@ -49,7 +49,7 @@ public class GenericJdbcContainer extends JdbcDatabaseContainer<GenericJdbcConta
         super(DockerImageName.parse(dockerImageName));
         dataSourceConfig = genericContainerConfig.getDataSourceConfig();
         dockerContainerConfig = genericContainerConfig.getDockerContainerConfig();
-        interpolator = new StringSearchInterpolator();
+        interpolator = new StringSearchInterpolator("{{", "}}");
         interpolator.addValueSource(dockerContainerConfig);
         interpolator.addValueSource(new ValueSourceAdapter());
 
