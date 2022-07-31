@@ -1,4 +1,4 @@
-package com.link_intersystems.dbunit.maven;
+package com.link_intersystems.dbunit.migration.testcontainers;
 
 import com.link_intersystems.dbunit.testcontainers.DatabaseContainerSupport;
 import org.apache.maven.plugin.logging.Log;

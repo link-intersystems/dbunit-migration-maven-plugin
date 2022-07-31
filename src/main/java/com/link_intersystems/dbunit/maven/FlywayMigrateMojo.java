@@ -2,10 +2,13 @@ package com.link_intersystems.dbunit.maven;
 
 import com.link_intersystems.dbunit.flyway.FlywayMigrationConfig;
 import com.link_intersystems.dbunit.migration.collection.DataSetCollectionFlywayMigration;
+import com.link_intersystems.dbunit.migration.datasets.DataSetsConfig;
+import com.link_intersystems.dbunit.migration.flyway.FlywayConfig;
 import com.link_intersystems.dbunit.migration.resources.BasepathTargetPathSupplier;
 import com.link_intersystems.dbunit.migration.resources.DataSetFileLocations;
 import com.link_intersystems.dbunit.migration.resources.DefaultDataSetResourcesSupplier;
 import com.link_intersystems.dbunit.migration.resources.TargetDataSetResourceSupplier;
+import com.link_intersystems.dbunit.migration.testcontainers.TestcontainersConfig;
 import com.link_intersystems.dbunit.stream.consumer.DataSetConsumerPipeTransformerAdapter;
 import com.link_intersystems.dbunit.stream.consumer.DataSetTransormer;
 import com.link_intersystems.dbunit.stream.consumer.ExternalSortTableConsumer;
@@ -45,18 +48,19 @@ public class FlywayMigrateMojo extends AbstractMojo {
     protected FlywayConfig flyway = new FlywayConfig();
 
     @Parameter
-    protected DataSetConfig dataSets = new DataSetConfig();
+    protected DataSetsConfig dataSets = new DataSetsConfig();
 
     @Parameter
     protected TestcontainersConfig testcontainers = new TestcontainersConfig();
 
     @Override
     public void execute() throws MojoExecutionException {
-        flyway.setProject(project);
-        dataSets.setProject(project);
+        FlywayAutoConfig flywayAutoConfig = new FlywayAutoConfig(project);
+        flywayAutoConfig.configure(flyway);
 
         ExpressionEvaluator expressionEvaluator = new PluginParameterExpressionEvaluator(mavenSession, mojoExecution);
-        dataSets.setExpressionEvaluator(expressionEvaluator);
+        DataSetAutoConfig dataSetAutoConfig = new DataSetAutoConfig(project, expressionEvaluator);
+        dataSetAutoConfig.configure(dataSets);
 
 
         executeMigration();
@@ -65,7 +69,7 @@ public class FlywayMigrateMojo extends AbstractMojo {
     protected void executeMigration() {
         DataSetCollectionFlywayMigration flywayMigration = new DataSetCollectionFlywayMigration();
 
-        DataSetFileLocations dataSetFileLocations = dataSets.getDataSetFileLocations();
+        DataSetFileLocations dataSetFileLocations = new DataSetsConfigFileLocations(project, dataSets);
 
         DataSetFileDetection fileDetection = new DataSetFileDetection();
         DataSetFileConfig config = new DataSetFileConfig();
@@ -100,7 +104,7 @@ public class FlywayMigrateMojo extends AbstractMojo {
         return new MavenLogAdapter(getLog());
     }
 
-    protected TargetDataSetResourceSupplier getTargetDataSetResourceSupplier(DataSetConfig dataSets) {
+    protected TargetDataSetResourceSupplier getTargetDataSetResourceSupplier(DataSetsConfig dataSets) {
         Path basepath = dataSets.getBasepath();
         Path targetPath = dataSets.getTargetBasepath();
         return new BasepathTargetPathSupplier(basepath, targetPath);

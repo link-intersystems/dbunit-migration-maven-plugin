@@ -17,7 +17,7 @@ class FlywayMigrateMojoParameterTest extends AbstractMinimalMigrationConfigurati
     void execute() throws Exception {
         FlywayMigrateMojo mojo = lookupConfiguredMojo("flyway-migrate");
 
-        Map<String, String> placeholderMap = mojo.flyway.getPlaceholderMap();
+        Map<String, String> placeholderMap = mojo.flyway.getPlaceholders();
 
         Map<String, String> expectedPlaceholders = new HashMap<>();
         expectedPlaceholders.put("new_first_name_column_name", "firstname");

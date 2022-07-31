@@ -1,4 +1,4 @@
-package com.link_intersystems.dbunit.maven;
+package com.link_intersystems.dbunit.migration.testcontainers;
 
 import org.codehaus.plexus.interpolation.AbstractValueSource;
 
