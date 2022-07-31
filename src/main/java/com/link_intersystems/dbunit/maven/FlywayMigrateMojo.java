@@ -9,6 +9,7 @@ import com.link_intersystems.dbunit.migration.resources.TargetDataSetResourceSup
 import com.link_intersystems.dbunit.stream.consumer.DataSetConsumerPipeTransformerAdapter;
 import com.link_intersystems.dbunit.stream.consumer.DataSetTransormer;
 import com.link_intersystems.dbunit.stream.consumer.ExternalSortTableConsumer;
+import com.link_intersystems.dbunit.stream.resource.file.DataSetFileConfig;
 import com.link_intersystems.dbunit.stream.resource.file.DataSetFileDetection;
 import com.link_intersystems.dbunit.table.DefaultTableOrder;
 import com.link_intersystems.dbunit.table.TableOrder;
@@ -37,9 +38,6 @@ public class FlywayMigrateMojo extends AbstractMojo {
     @Parameter(property = "mojoExecution", readonly = true, required = true)
     protected MojoExecution mojoExecution;
 
-    /**
-     * The Maven Session.
-     */
     @Parameter(defaultValue = "${session}")
     protected MavenSession mavenSession;
 
@@ -50,14 +48,10 @@ public class FlywayMigrateMojo extends AbstractMojo {
     protected DataSetConfig dataSets = new DataSetConfig();
 
     @Parameter
-    protected String dockerImageName;
+    protected TestcontainersConfig testcontainers = new TestcontainersConfig();
 
     @Override
     public void execute() throws MojoExecutionException {
-        if (dockerImageName == null) {
-            throw new MojoExecutionException("dockerImageName must be configured.");
-        }
-
         flyway.setProject(project);
         dataSets.setProject(project);
 
@@ -73,10 +67,13 @@ public class FlywayMigrateMojo extends AbstractMojo {
 
         DataSetFileLocations dataSetFileLocations = dataSets.getDataSetFileLocations();
 
-        DefaultDataSetResourcesSupplier dataSetResourcesSupplier = new DefaultDataSetResourcesSupplier(dataSetFileLocations, new DataSetFileDetection());
+        DataSetFileDetection fileDetection = new DataSetFileDetection();
+        DataSetFileConfig config = new DataSetFileConfig();
+        fileDetection.setDataSetFileConfig(config);
+        DefaultDataSetResourcesSupplier dataSetResourcesSupplier = new DefaultDataSetResourcesSupplier(dataSetFileLocations, fileDetection);
         flywayMigration.setDataSetResourcesSupplier(dataSetResourcesSupplier);
 
-        DatabaseContainerSupport containerSupport = DatabaseContainerSupport.getDatabaseContainerSupport(dockerImageName);
+        DatabaseContainerSupport containerSupport = testcontainers.getDatabaseContainerSupport(getLog());
         flywayMigration.setDatabaseContainerSupport(containerSupport);
 
 

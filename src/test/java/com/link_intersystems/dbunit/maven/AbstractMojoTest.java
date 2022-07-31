@@ -81,14 +81,18 @@ public abstract class AbstractMojoTest {
 
     protected abstract TestMavenProject createTestMavenProject(Path basepath);
 
-    @SuppressWarnings("unchecked")
     protected <T extends Mojo> T lookupConfiguredMojo(String goal) throws Exception {
+        return lookupConfiguredMojo(goal, false);
+    }
+
+    @SuppressWarnings("unchecked")
+    protected <T extends Mojo> T lookupConfiguredMojo(String goal, boolean debugEnabled) throws Exception {
         MavenProject mavenProject = getMavenProject();
         Mojo mojo = testCaseAdapter.lookupConfiguredMojo(mavenProject, goal);
         mojo.setLog(new SystemStreamLog() {
             @Override
             public boolean isDebugEnabled() {
-                return true;
+                return debugEnabled;
             }
         });
         return (T) mojo;

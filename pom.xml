@@ -15,12 +15,12 @@
     <version>1.0.0-SNAPSHOT</version>
 
     <properties>
-        <lis-commons.version>1.6.2-SNAPSHOT</lis-commons.version>
+        <lis-commons.version>1.7.0</lis-commons.version>
         <junit.jupiter.version>5.8.2</junit.jupiter.version>
         <mockito.version>4.4.0</mockito.version>
         <slf4j.version>1.7.36</slf4j.version>
         <dbunit.version>2.7.3</dbunit.version>
-        <lis-dbunit.version>1.0.4-SNAPSHOT</lis-dbunit.version>
+        <lis-dbunit.version>1.0.4</lis-dbunit.version>
         <org.testcontainers.version>1.17.3</org.testcontainers.version>
     </properties>
 
@@ -40,18 +40,15 @@
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-compat</artifactId>
-            <version>3.6.3</version>
         </dependency>
         <dependency>
             <groupId>org.codehaus.plexus</groupId>
             <artifactId>plexus-utils</artifactId>
-            <version>3.4.2</version>
         </dependency>
 
         <dependency>
             <groupId>com.link-intersystems.commons</groupId>
             <artifactId>lis-commons-io</artifactId>
-            <version>1.6.2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.link-intersystems.dbunit</groupId>
@@ -121,6 +118,16 @@
             <dependency>
                 <groupId>org.apache.maven</groupId>
                 <artifactId>maven-core</artifactId>
+                <version>3.6.3</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codehaus.plexus</groupId>
+                <artifactId>plexus-utils</artifactId>
+                <version>3.4.2</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.maven</groupId>
+                <artifactId>maven-compat</artifactId>
                 <version>3.6.3</version>
             </dependency>
 
