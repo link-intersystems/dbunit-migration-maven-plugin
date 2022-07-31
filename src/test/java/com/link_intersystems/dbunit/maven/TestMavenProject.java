@@ -28,7 +28,7 @@ public class TestMavenProject {
         this.resourcePath = resourcePath;
     }
 
-    public void setDataSetFileConfig(DataSetFileConfig dataSetFileConfig){
+    public void setDataSetFileConfig(DataSetFileConfig dataSetFileConfig) {
         dataSetFileDetection.setDataSetFileConfig(dataSetFileConfig);
     }
 

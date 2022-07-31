@@ -21,29 +21,7 @@ import java.nio.file.Path;
  */
 public abstract class AbstractMojoTest {
 
-    private static class MojoTestCaseAdapter extends AbstractMojoTestCase {
-        @Override
-        public void setUp() throws Exception {
-            super.setUp();
-        }
-
-        public <T> T doLookup(Class<T> role) throws ComponentLookupException {
-            return lookup(role);
-        }
-
-        @Override
-        public MavenSession newMavenSession(MavenProject project) {
-            return super.newMavenSession(project);
-        }
-
-        @Override
-        public Mojo lookupConfiguredMojo(MavenProject project, String goal) throws Exception {
-            return super.lookupConfiguredMojo(project, goal);
-        }
-    }
-
     private MojoTestCaseAdapter testCaseAdapter = new MojoTestCaseAdapter();
-
     private TestMavenProject testMavenProject;
     private MavenSession mavenSession;
     private MavenProject mavenProject;
@@ -96,5 +74,26 @@ public abstract class AbstractMojoTest {
             }
         });
         return (T) mojo;
+    }
+
+    private static class MojoTestCaseAdapter extends AbstractMojoTestCase {
+        @Override
+        public void setUp() throws Exception {
+            super.setUp();
+        }
+
+        public <T> T doLookup(Class<T> role) throws ComponentLookupException {
+            return lookup(role);
+        }
+
+        @Override
+        public MavenSession newMavenSession(MavenProject project) {
+            return super.newMavenSession(project);
+        }
+
+        @Override
+        public Mojo lookupConfiguredMojo(MavenProject project, String goal) throws Exception {
+            return super.lookupConfiguredMojo(project, goal);
+        }
     }
 }

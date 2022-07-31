@@ -18,12 +18,12 @@ public class DataSetsConfig {
     private boolean columnSensing;
     private String charset;
 
-    public void setColumnSensing(boolean columnSensing) {
-        this.columnSensing = columnSensing;
-    }
-
     public boolean isColumnSensing() {
         return columnSensing;
+    }
+
+    public void setColumnSensing(boolean columnSensing) {
+        this.columnSensing = columnSensing;
     }
 
     public boolean isDefaultResources() {
@@ -50,12 +50,12 @@ public class DataSetsConfig {
         this.tableOrder = tableOrder;
     }
 
-    public void setSourceBasedir(File sourceBasedir) {
-        this.sourceBasedir = sourceBasedir;
-    }
-
     public File getSourceBasedir() {
         return sourceBasedir;
+    }
+
+    public void setSourceBasedir(File sourceBasedir) {
+        this.sourceBasedir = sourceBasedir;
     }
 
     public Path getBasepath() {

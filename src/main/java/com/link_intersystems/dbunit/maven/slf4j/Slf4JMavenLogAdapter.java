@@ -24,6 +24,28 @@ public class Slf4JMavenLogAdapter implements Logger {
         this.name = requireNonNull(name);
     }
 
+    private static Object[] trimmedCopy(Object[] argArray) {
+        if (argArray == null || argArray.length == 0) {
+            throw new IllegalStateException("non-sensical empty or null argument array");
+        }
+        final int trimemdLen = argArray.length - 1;
+        Object[] trimmed = new Object[trimemdLen];
+        System.arraycopy(argArray, 0, trimmed, 0, trimemdLen);
+        return trimmed;
+    }
+
+    private static final Throwable extractThrowable(Object[] argArray) {
+        if (argArray == null || argArray.length == 0) {
+            return null;
+        }
+
+        final Object lastEntry = argArray[argArray.length - 1];
+        if (lastEntry instanceof Throwable) {
+            return (Throwable) lastEntry;
+        }
+        return null;
+    }
+
     @Override
     public String getName() {
         return name;
@@ -119,28 +141,6 @@ public class Slf4JMavenLogAdapter implements Logger {
         } else {
             log.debug(format, throwable);
         }
-    }
-
-    private static Object[] trimmedCopy(Object[] argArray) {
-        if (argArray == null || argArray.length == 0) {
-            throw new IllegalStateException("non-sensical empty or null argument array");
-        }
-        final int trimemdLen = argArray.length - 1;
-        Object[] trimmed = new Object[trimemdLen];
-        System.arraycopy(argArray, 0, trimmed, 0, trimemdLen);
-        return trimmed;
-    }
-
-    private static final Throwable extractThrowable(Object[] argArray) {
-        if (argArray == null || argArray.length == 0) {
-            return null;
-        }
-
-        final Object lastEntry = argArray[argArray.length - 1];
-        if (lastEntry instanceof Throwable) {
-            return (Throwable) lastEntry;
-        }
-        return null;
     }
 
     @Override

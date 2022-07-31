@@ -18,12 +18,12 @@ public class FlywayConfig {
     private String targetVersion;
     private String[] locations;
 
-    public void setPlaceholders(Map<String, String> placeholders) {
-        this.placeholders = placeholders;
-    }
-
     public Map<String, String> getPlaceholders() {
         return placeholders;
+    }
+
+    public void setPlaceholders(Map<String, String> placeholders) {
+        this.placeholders = placeholders;
     }
 
     public String getSourceVersion() {

@@ -26,6 +26,26 @@ class Slf4JMavenLogAdapterTest {
     private Logger logger;
     private Marker marker;
 
+    public static List<LoggerInvocation> getInvocations() {
+        List<LoggerInvocation> loggerInvocations = new ArrayList<>();
+
+        List<String> levels = Arrays.asList("info", "warn", "error", "debug");
+        for (String level : levels) {
+
+            List<Marker> markers = Arrays.asList(null, mock(Marker.class));
+
+            for (Marker marker : markers) {
+                loggerInvocations.add(new LoggerInvocation("Message", level, marker, "Message", null, null));
+                loggerInvocations.add(new LoggerInvocation("Message Hello", level, marker, "Message {}", new Object[]{"Hello"}, null));
+                loggerInvocations.add(new LoggerInvocation("Message Hello World", level, marker, "Message {} {}", new Object[]{"Hello", "World"}, null));
+                loggerInvocations.add(new LoggerInvocation("Message Hello World !", level, marker, "Message {} {} {}", new Object[]{"Hello", "World", "!"}, null));
+                loggerInvocations.add(new LoggerInvocation("Message", level, marker, "Message", null, new RuntimeException()));
+            }
+        }
+
+        return loggerInvocations;
+    }
+
     @BeforeEach
     void setUp() {
         mavenLog = mock(Log.class);
@@ -70,7 +90,6 @@ class Slf4JMavenLogAdapterTest {
         assertTrue(logger.isErrorEnabled(marker));
     }
 
-
     @Test
     void isWarnEnabled() {
         assertFalse(logger.isWarnEnabled());
@@ -86,53 +105,6 @@ class Slf4JMavenLogAdapterTest {
     void isTraceEnabled() {
         assertFalse(logger.isTraceEnabled());
         assertFalse(logger.isTraceEnabled(marker));
-    }
-
-    private static class LoggerInvocation {
-        String expectedMessage;
-        String level;
-        Marker marker;
-        String message;
-        Object[] args;
-        Throwable t;
-
-        public LoggerInvocation(String expectedMessage, String level, Marker marker, String message, Object[] args, Throwable t) {
-            this.expectedMessage = expectedMessage;
-            this.level = level;
-            this.marker = marker;
-            this.message = message;
-            this.args = args;
-            this.t = t;
-        }
-
-        @Override
-        public String toString() {
-            return "LoggerInvocation{" +
-                    "expectedMessage='" + expectedMessage + '\'' +
-                    ", level='" + level + '\'' +
-                    ", throwable='" + (t != null) + '\'' +
-                    '}';
-        }
-    }
-
-    public static List<LoggerInvocation> getInvocations() {
-        List<LoggerInvocation> loggerInvocations = new ArrayList<>();
-
-        List<String> levels = Arrays.asList("info", "warn", "error", "debug");
-        for (String level : levels) {
-
-            List<Marker> markers = Arrays.asList(null, mock(Marker.class));
-
-            for (Marker marker : markers) {
-                loggerInvocations.add(new LoggerInvocation("Message", level, marker, "Message", null, null));
-                loggerInvocations.add(new LoggerInvocation("Message Hello", level, marker, "Message {}", new Object[]{"Hello"}, null));
-                loggerInvocations.add(new LoggerInvocation("Message Hello World", level, marker, "Message {} {}", new Object[]{"Hello", "World"}, null));
-                loggerInvocations.add(new LoggerInvocation("Message Hello World !", level, marker, "Message {} {} {}", new Object[]{"Hello", "World", "!"}, null));
-                loggerInvocations.add(new LoggerInvocation("Message", level, marker, "Message", null, new RuntimeException()));
-            }
-        }
-
-        return loggerInvocations;
     }
 
     @ParameterizedTest
@@ -195,6 +167,33 @@ class Slf4JMavenLogAdapterTest {
             throw new RuntimeException(e);
         }
 
+    }
+
+    private static class LoggerInvocation {
+        String expectedMessage;
+        String level;
+        Marker marker;
+        String message;
+        Object[] args;
+        Throwable t;
+
+        public LoggerInvocation(String expectedMessage, String level, Marker marker, String message, Object[] args, Throwable t) {
+            this.expectedMessage = expectedMessage;
+            this.level = level;
+            this.marker = marker;
+            this.message = message;
+            this.args = args;
+            this.t = t;
+        }
+
+        @Override
+        public String toString() {
+            return "LoggerInvocation{" +
+                    "expectedMessage='" + expectedMessage + '\'' +
+                    ", level='" + level + '\'' +
+                    ", throwable='" + (t != null) + '\'' +
+                    '}';
+        }
     }
 
 

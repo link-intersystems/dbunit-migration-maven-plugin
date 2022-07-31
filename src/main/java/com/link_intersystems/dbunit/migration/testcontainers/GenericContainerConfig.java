@@ -6,7 +6,6 @@ import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConfig;
 import org.slf4j.Logger;
 
-import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -16,7 +15,7 @@ public class GenericContainerConfig {
 
     private DataSourceConfig dataSource;
     private DockerContainerConfig dockerContainer;
-    private Map<String, String> dbunitConfigProperties;
+    private Properties dbunitConfigProperties = new Properties();
 
 
     public DataSourceConfig getDataSourceConfig() {
@@ -41,7 +40,7 @@ public class GenericContainerConfig {
             return genericJdbcContainer;
         });
 
-        if (dbunitConfigProperties != null && !dbunitConfigProperties.isEmpty()) {
+        if (!dbunitConfigProperties.isEmpty()) {
             DatabaseConfig databaseConfig = defaultDatabaseContainerSupport.getDatabaseConfig();
             applyConfiguration(databaseConfig, dbunitConfigProperties);
         }
@@ -49,11 +48,9 @@ public class GenericContainerConfig {
         return defaultDatabaseContainerSupport;
     }
 
-    private void applyConfiguration(DatabaseConfig databaseConfig, Map<String, String> dbunitConfigProperties) {
-        Properties properties = new Properties();
-        properties.putAll(dbunitConfigProperties);
+    private void applyConfiguration(DatabaseConfig databaseConfig, Properties dbunitConfigProperties) {
         try {
-            databaseConfig.setPropertiesByString(properties);
+            databaseConfig.setPropertiesByString(dbunitConfigProperties);
         } catch (DatabaseUnitException e) {
             throw new RuntimeException("Can not apply dbunit configuration.", e);
         }

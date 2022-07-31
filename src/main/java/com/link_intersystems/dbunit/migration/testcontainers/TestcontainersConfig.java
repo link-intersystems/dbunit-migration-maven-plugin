@@ -21,13 +21,12 @@ public class TestcontainersConfig {
         this.containerConfig = containerConfig;
     }
 
+    public String getImage() {
+        return image;
+    }
 
     public void setImage(String image) {
         this.image = image;
-    }
-
-    public String getImage() {
-        return image;
     }
 
     public DatabaseContainerSupport getDatabaseContainerSupport(Logger logger) {

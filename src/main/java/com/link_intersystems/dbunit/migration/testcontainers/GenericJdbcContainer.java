@@ -19,32 +19,10 @@ import java.util.function.Supplier;
  */
 public class GenericJdbcContainer extends JdbcDatabaseContainer<GenericJdbcContainer> {
 
-    private class ValueSourceAdapter extends AbstractValueSource {
-
-        ValueSourceAdapter() {
-            super(false);
-        }
-
-        @Override
-        public Object getValue(String expression) {
-            if ("host".equals(expression)) {
-                return getHost();
-            }
-
-            if ("port".equals(expression)) {
-                return getMappedPort(dockerContainerConfig.getExposedPort());
-            }
-
-            return null;
-        }
-    }
-
-    private Logger logger = LoggerFactory.getLogger(GenericJdbcContainer.class);
-
     private final DataSourceConfig dataSourceConfig;
     private final DockerContainerConfig dockerContainerConfig;
     private final StringSearchInterpolator interpolator;
-
+    private Logger logger = LoggerFactory.getLogger(GenericJdbcContainer.class);
     public GenericJdbcContainer(String dockerImageName, GenericContainerConfig genericContainerConfig) {
         super(DockerImageName.parse(dockerImageName));
         dataSourceConfig = genericContainerConfig.getDataSourceConfig();
@@ -139,5 +117,25 @@ public class GenericJdbcContainer extends JdbcDatabaseContainer<GenericJdbcConta
             return logger;
         }
         return super.logger();
+    }
+
+    private class ValueSourceAdapter extends AbstractValueSource {
+
+        ValueSourceAdapter() {
+            super(false);
+        }
+
+        @Override
+        public Object getValue(String expression) {
+            if ("host".equals(expression)) {
+                return getHost();
+            }
+
+            if ("port".equals(expression)) {
+                return getMappedPort(dockerContainerConfig.getExposedPort());
+            }
+
+            return null;
+        }
     }
 }
