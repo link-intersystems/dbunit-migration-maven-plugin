@@ -21,7 +21,6 @@ public class MavenTestProjectAssertions {
 
     private FileScanner interpolationFileScanner = new FileScanner();
     private DataSetFileDetection dataSetFileDetection = new DataSetFileDetection();
-    private MavenPropertiesValueSource mavenPropertiesValueSource = new MavenPropertiesValueSource();
 
     private File basedir;
 
