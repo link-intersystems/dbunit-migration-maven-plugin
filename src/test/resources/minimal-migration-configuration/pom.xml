@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>test</groupId>
+    <artifactId>test</artifactId>
+    <version>1</version>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.link-intersystems.dbunit.maven</groupId>
+                <artifactId>dbunit-migration-maven-plugin</artifactId>
+                <version>#{version}</version>
+                <configuration>
+					<flyway>
+					    <sourceVersion>1</sourceVersion>
+						<placeholders>
+						    <new_first_name_column_name>firstname</new_first_name_column_name>
+							<new_last_name_column_name>
+								lastname
+							</new_last_name_column_name>
+						</placeholders>
+					</flyway>
+					<dataSets>
+						<columnSensing>true</columnSensing>
+						<tableOrder>
+							<tableorder>language</tableorder>
+							<tableorder>film</tableorder>
+							<tableorder>actor</tableorder>
+							<tableorder>
+								film_actor
+							</tableorder>
+						</tableOrder>
+					</dataSets>
+					<testcontainers>
+						<image>postgres:latest</image>
+					</testcontainers>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

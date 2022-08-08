@@ -1,33 +1,35 @@
 package com.link_intersystems.dbunit.maven;
 
 import com.link_intersystems.dbunit.stream.resource.file.DataSetFileConfig;
+import com.link_intersystems.maven.plugin.test.MavenTestProject;
+import com.link_intersystems.maven.plugin.test.TestMojo;
+import com.link_intersystems.maven.plugin.test.extensions.MojoTest;
+import org.apache.maven.project.MavenProject;
 import org.dbunit.dataset.DataSetException;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
+import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
 
 /**
  * @author René Link {@literal <rene.link@link-intersystems.com>}
  */
-class FlywayMigrateMojoMinimalConfigTest extends AbstractMojoTest {
 
-    @Override
-    protected TestMavenProject createTestMavenProject(Path basepath) {
-        return new TestMavenProject(basepath, "minimal-migration-configuration.zip");
-    }
+@ExtendWith(MojoTest.class)
+class FlywayMigrateMojoMinimalConfigTest {
 
     @Test
-    void execute() throws Exception {
-        FlywayMigrateMojo mojo = lookupConfiguredMojo("flyway-migrate");
+    @MavenTestProject("/minimal-migration-configuration")
+    void execute(@TestMojo(goal = "flyway-migrate") FlywayMigrateMojo mojo, MavenProject mavenProject) throws Exception {
 
         mojo.execute();
 
-        assertDataSetsMigrated();
+        assertDataSetsMigrated(mavenProject.getBasedir());
     }
 
-    private void assertDataSetsMigrated() throws IOException, DataSetException {
-        TestMavenProject testMavenProject = getTestMavenProject();
+    private void assertDataSetsMigrated(File basedir) throws IOException, DataSetException {
+        MavenTestProjectAssertions testMavenProject = new MavenTestProjectAssertions(basedir);
         DataSetFileConfig dataSetFileConfig = new DataSetFileConfig();
         dataSetFileConfig.setColumnSensing(true);
         testMavenProject.setDataSetFileConfig(dataSetFileConfig);

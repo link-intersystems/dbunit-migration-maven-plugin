@@ -15,7 +15,7 @@ public class MavenPropertiesValueSource extends AbstractValueSource {
         super(false);
 
         try {
-            properties.load(TestMavenProject.class.getResourceAsStream("/maven.properties"));
+            properties.load(MavenTestProjectAssertions.class.getResourceAsStream("/maven.properties"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
