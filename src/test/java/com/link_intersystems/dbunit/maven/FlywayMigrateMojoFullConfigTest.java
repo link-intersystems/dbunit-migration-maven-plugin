@@ -1,13 +1,11 @@
 package com.link_intersystems.dbunit.maven;
 
 import com.link_intersystems.dbunit.stream.resource.file.DataSetFileConfig;
-import com.link_intersystems.maven.plugin.test.Basedir;
 import com.link_intersystems.maven.plugin.test.MavenTestProject;
 import com.link_intersystems.maven.plugin.test.TestMojo;
 import com.link_intersystems.maven.plugin.test.extensions.MojoTest;
 import org.apache.maven.project.MavenProject;
 import org.dbunit.dataset.DataSetException;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
