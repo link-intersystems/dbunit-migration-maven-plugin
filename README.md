@@ -2,6 +2,27 @@
 [![Coverage Status](https://coveralls.io/repos/github/link-intersystems/dbunit-migration-maven-plugin/badge.svg?branch=master)](https://coveralls.io/github/link-intersystems/dbunit-migration-maven-plugin?branch=master)
 [![Maven Central](https://img.shields.io/maven-central/v/com.link-intersystems.dbunit.maven/dbunit-migration-maven-plugin)](https://mvnrepository.com/artifact/com.link-intersystems.dbunit.maven)
 
+Run the plugin with
+
+```
+mvn com.link-intersystems.dbunit.maven:dbunit-migration-maven-plugin:1.0.0:flyway-migrate.
+```
+
+The plugin will output the files it migrates.
+
+```shell
+[info] Detected 4 data set resources to migrate
+[info] ♻︎ Start migration '...\src\test\resources\flat\tiny-sakila-flat-column-sensing.xml'
+[info] ✔︎ Migrated '...\target\flat\tiny-sakila-flat-column-sensing.xml'
+[info] ♻︎ Start migration '...\src\test\resources\flat\tiny-sakila-flat.xml'
+[info] ✔︎ Migrated '...\target\flat\tiny-sakila-flat.xml'
+[info] ♻︎ Start migration '...\src\test\resources\tiny-sakila-csv'
+[info] ✔︎ Migrated '...\target\tiny-sakila-csv'
+[info] ♻︎ Start migration '...\src\test\resources\xml\tiny-sakila.xml'
+[info] ✔︎ Migrated '...\target\xml\tiny-sakila.xml'
+[info] Migrated 4 data set resources 
+```
+
 ## Minimal Plugin Configuration
 
 This minimal plugin configuration will pick up all data sets under `${project.basedir}/src/test/resources`
