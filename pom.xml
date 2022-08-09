@@ -104,8 +104,10 @@
             <artifactId>maven-plugin-commons-test</artifactId>
             <scope>test</scope>
         </dependency>
-
-
+        <dependency>
+            <groupId>com.link-intersystems.maven.plugins</groupId>
+            <artifactId>maven-mojo-commons</artifactId>
+        </dependency>
     </dependencies>
 
 

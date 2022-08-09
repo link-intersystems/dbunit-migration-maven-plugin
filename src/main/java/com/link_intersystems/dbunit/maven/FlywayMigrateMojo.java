@@ -1,7 +1,6 @@
 package com.link_intersystems.dbunit.maven;
 
 import com.link_intersystems.dbunit.flyway.FlywayMigrationConfig;
-import com.link_intersystems.dbunit.maven.slf4j.Slf4JMavenLogAdapter;
 import com.link_intersystems.dbunit.migration.collection.DataSetCollectionFlywayMigration;
 import com.link_intersystems.dbunit.migration.datasets.DataSetsConfig;
 import com.link_intersystems.dbunit.migration.flyway.FlywayConfig;
@@ -18,6 +17,7 @@ import com.link_intersystems.dbunit.stream.resource.file.DataSetFileDetection;
 import com.link_intersystems.dbunit.table.DefaultTableOrder;
 import com.link_intersystems.dbunit.table.TableOrder;
 import com.link_intersystems.dbunit.testcontainers.DatabaseContainerSupport;
+import com.link_intersystems.maven.logging.slf4j.Slf4JMavenLogAdapter;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecution;
