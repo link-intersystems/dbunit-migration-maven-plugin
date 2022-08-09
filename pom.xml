@@ -221,25 +221,6 @@
                 </executions>
             </plugin>
         </plugins>
-        <testResources>
-            <testResource>
-                <directory>${project.basedir}/src/test/resources</directory>
-                <filtering>true</filtering>
-                <includes>
-                    <include>**/*</include>
-                </includes>
-                <excludes>
-                    <exclude>**/*.zip</exclude>
-                </excludes>
-            </testResource>
-            <testResource>
-                <directory>${project.basedir}/src/test/resources</directory>
-                <filtering>false</filtering>
-                <includes>
-                    <include>**/*.zip</include>
-                </includes>
-            </testResource>
-        </testResources>
     </build>
 
     <profiles>

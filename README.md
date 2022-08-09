@@ -80,6 +80,9 @@ The next section shows you all possible configuration options.
                 <flyway>
                     <sourceVersion>1</sourceVersion>
                     <targetVersion>2</targetVersion>
+			        <locations>
+					    <location>${project.basedir}/src/main/resources/db/migration</location>
+					</locations>
                     <placeholders>
                         <new_first_name_column_name>firstname</new_first_name_column_name>
                         <new_last_name_column_name>
