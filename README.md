@@ -2,15 +2,16 @@
 [![Coverage Status](https://coveralls.io/repos/github/link-intersystems/dbunit-migration-maven-plugin/badge.svg?branch=master)](https://coveralls.io/github/link-intersystems/dbunit-migration-maven-plugin?branch=master)
 [![Maven Central](https://img.shields.io/maven-central/v/com.link-intersystems.dbunit.maven/dbunit-migration-maven-plugin)](https://mvnrepository.com/artifact/com.link-intersystems.dbunit.maven)
 
-The dbunit-migration-maven-plugin is a tool to migrate a collection of DBUnit data set files from one database schema version to another with the use of Flyway and testcontainers.
+The dbunit-migration-maven-plugin is a tool to migrate a collection of [DBUnit](http://dbunit.sourceforge.net/) data set files from one database schema
+version to another with the use of [Flyway](https://flywaydb.org/) and [testcontainers](https://www.testcontainers.org/).
 
 The overall process the plugin implements is:
 
-1. Start a clean database with [testcontainers](https://www.testcontainers.org/).
-2. Use [Flyway](https://flywaydb.org/) to migrate the database to the version the data set files are based on.
-3. Load a data set from a [DBUnit](http://dbunit.sourceforge.net/) file into the database.
-4. Let [Flyway](https://flywaydb.org/) migrate the database to a target version.
-5. Use [DBUnit](http://dbunit.sourceforge.net/) to extract the database to a DBunit data set file.
+1. Start a clean database with testcontainers.
+2. Use Flyway to migrate the database to the version the data set files are based on.
+3. Load a data set from a DBUnit file into the database.
+4. Let Flyway migrate the database to a target version.
+5. Use DBUnit to extract the database to a DBunit data set file.
 6. Repeat for all data set files.
 
 ## Run
