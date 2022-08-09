@@ -1,6 +1,6 @@
 package com.link_intersystems.dbunit.maven;
 
-import com.link_intersystems.dbunit.migration.collection.AbstractLoggingDataSetCollectionMigrationListener;
+import com.link_intersystems.dbunit.migration.collection.AbstractLoggingDataSetsMigrationListener;
 import org.apache.maven.plugin.logging.Log;
 import org.dbunit.dataset.DataSetException;
 
@@ -9,7 +9,7 @@ import java.util.function.Supplier;
 /**
  * @author René Link {@literal <rene.link@link-intersystems.com>}
  */
-class MavenLogAdapter extends AbstractLoggingDataSetCollectionMigrationListener {
+class MavenLogAdapter extends AbstractLoggingDataSetsMigrationListener {
 
     private Log log;
 
@@ -18,12 +18,12 @@ class MavenLogAdapter extends AbstractLoggingDataSetCollectionMigrationListener 
     }
 
     @Override
-    protected void logSucessfullyMigrated(String s) {
+    protected void logMigrationSuccessful(String s) {
         log.info(s);
     }
 
     @Override
-    protected void logFailedMigration(DataSetException e, String s) {
+    protected void logMigrationFailed(DataSetException e, String s) {
         if (log.isDebugEnabled()) {
             log.error(s, e);
             return;
@@ -46,7 +46,7 @@ class MavenLogAdapter extends AbstractLoggingDataSetCollectionMigrationListener 
     }
 
     @Override
-    protected void logDataSetCollectionMigrationFinished(String s, Supplier<String> supplier) {
+    protected void logMigrationsFinished(String s, Supplier<String> supplier) {
         log.info(s);
         if (log.isDebugEnabled()) {
             log.debug(supplier.get());

@@ -1,7 +1,8 @@
 package com.link_intersystems.dbunit.maven;
 
+import com.link_intersystems.dbunit.flyway.FlywayDatabaseMigrationSupport;
 import com.link_intersystems.dbunit.flyway.FlywayMigrationConfig;
-import com.link_intersystems.dbunit.migration.collection.DataSetCollectionFlywayMigration;
+import com.link_intersystems.dbunit.migration.collection.DataSetsMigrations;
 import com.link_intersystems.dbunit.migration.datasets.DataSetsConfig;
 import com.link_intersystems.dbunit.migration.flyway.FlywayConfig;
 import com.link_intersystems.dbunit.migration.resources.BasepathTargetPathSupplier;
@@ -68,7 +69,7 @@ public class FlywayMigrateMojo extends AbstractMojo {
     }
 
     protected void executeMigration() {
-        DataSetCollectionFlywayMigration flywayMigration = new DataSetCollectionFlywayMigration();
+        DataSetsMigrations dataSetsMigrations = new DataSetsMigrations();
 
         DataSetFileLocations dataSetFileLocations = new DataSetsConfigFileLocations(project, dataSets);
 
@@ -78,19 +79,19 @@ public class FlywayMigrateMojo extends AbstractMojo {
         config.setCharset(dataSets.getCharset());
         config.setColumnSensing(dataSets.isColumnSensing());
         DefaultDataSetResourcesSupplier dataSetResourcesSupplier = new DefaultDataSetResourcesSupplier(dataSetFileLocations, fileDetection);
-        flywayMigration.setDataSetResourcesSupplier(dataSetResourcesSupplier);
+        dataSetsMigrations.setDataSetResourcesSupplier(dataSetResourcesSupplier);
 
         DatabaseContainerSupport containerSupport = testcontainers.getDatabaseContainerSupport(new Slf4JMavenLogAdapter(getLog()));
-        flywayMigration.setDatabaseContainerSupport(containerSupport);
+        dataSetsMigrations.setDatabaseContainerSupport(containerSupport);
 
 
-        flywayMigration.setTargetDataSetResourceSupplier(getTargetDataSetResourceSupplier(dataSets));
-        flywayMigration.setMigrationConfig(getFlywayMigrationConfig());
-        flywayMigration.setMigrationListener(getMigrationListener());
-        flywayMigration.setBeforeMigration(getBeforeMigrationTransformer());
+        dataSetsMigrations.setTargetDataSetResourceSupplier(getTargetDataSetResourceSupplier(dataSets));
+        dataSetsMigrations.setDatabaseMigrationSupport(new FlywayDatabaseMigrationSupport(getFlywayMigrationConfig()));
+        dataSetsMigrations.setMigrationListener(getMigrationListener());
+        dataSetsMigrations.setBeforeMigration(getBeforeMigrationTransformer());
 
 
-        flywayMigration.exec();
+        dataSetsMigrations.exec();
     }
 
     protected DataSetTransormer getBeforeMigrationTransformer() {

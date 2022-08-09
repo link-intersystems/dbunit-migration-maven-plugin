@@ -20,7 +20,7 @@
         <mockito.version>4.4.0</mockito.version>
         <slf4j.version>1.7.36</slf4j.version>
         <dbunit.version>2.7.3</dbunit.version>
-        <lis-dbunit.version>1.0.4</lis-dbunit.version>
+        <lis-dbunit.version>1.0.5-SNAPSHOT</lis-dbunit.version>
         <org.testcontainers.version>1.17.3</org.testcontainers.version>
         <maven-plugin-commons>1.0.0-SNAPSHOT</maven-plugin-commons>
     </properties>
@@ -54,6 +54,10 @@
         <dependency>
             <groupId>com.link-intersystems.dbunit</groupId>
             <artifactId>lis-dbunit-migration</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.link-intersystems.dbunit</groupId>
+            <artifactId>lis-dbunit-flyway</artifactId>
         </dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>

@@ -20,9 +20,9 @@ public class MigratedDataSetAssertion {
         assertEquals(2, actorTable.getRowCount());
         TableUtil actorUtil = new TableUtil(actorTable);
         Row firstRow = actorUtil.getRow(0);
-        assertEquals("PENELOPE", firstRow.getValueByColumnName("firstname"));
+        assertEquals("PENELOPE", firstRow.getValue("firstname"));
         Row secondRow = actorUtil.getRow(1);
-        assertEquals("WAHLBERG", secondRow.getValueByColumnName("lastname"));
+        assertEquals("WAHLBERG", secondRow.getValue("lastname"));
 
         ITable languageTable = dataSet.getTable("language");
         assertNotNull(languageTable);
