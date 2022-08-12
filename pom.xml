@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -12,7 +11,7 @@
     <groupId>com.link-intersystems.dbunit.maven</groupId>
     <artifactId>dbunit-migration-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.1</version>
 
     <properties>
         <lis-commons.version>1.7.1</lis-commons.version>
@@ -22,7 +21,7 @@
         <dbunit.version>2.7.3</dbunit.version>
         <lis-dbunit.version>1.0.5</lis-dbunit.version>
         <org.testcontainers.version>1.17.3</org.testcontainers.version>
-        <maven-plugin-commons>1.0.0-SNAPSHOT</maven-plugin-commons>
+        <maven-plugin-commons>1.0.0</maven-plugin-commons>
     </properties>
 
     <dependencies>
@@ -283,4 +282,8 @@
             </snapshots>
         </repository>
     </repositories>
+
+  <scm>
+    <tag>dbunit-migration-maven-plugin-1.0.1</tag>
+  </scm>
 </project>
