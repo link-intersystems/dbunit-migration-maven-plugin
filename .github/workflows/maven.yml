@@ -22,10 +22,12 @@ jobs:
         java-version: '8'
         distribution: 'temurin'
         cache: maven
+
     - name: Build with Maven
       env:
         COVERALLS_TOKEN: ${{ secrets.COVERALLS_TOKEN }}
       run: mvn -P ci -B package jacoco:report coveralls:report --file pom.xml
-    - name: Clear Caches
-      run: curl -X PURGE https://camo.githubusercontent.com/1fdb6adf59a34d3d881e888038e1ba951235a0612103c9b685838f6f50da44f1/68747470733a2f2f636f766572616c6c732e696f2f7265706f732f6769746875622f6c696e6b2d696e74657273797374656d732f6462756e69742d6d6967726174696f6e2d6d6176656e2d706c7567696e2f62616467652e7376673f6272616e63683d6d6173746572
-
+    - name: refresh badges
+      uses: b3b00/refreshBadgesAction@v1.0.7
+      with:
+        repository : 'b3b00/csly'
