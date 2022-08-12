@@ -15,12 +15,12 @@
     <version>1.0.1-SNAPSHOT</version>
 
     <properties>
-        <lis-commons.version>1.7.0</lis-commons.version>
+        <lis-commons.version>1.7.1</lis-commons.version>
         <junit.jupiter.version>5.8.2</junit.jupiter.version>
         <mockito.version>4.4.0</mockito.version>
         <slf4j.version>1.7.36</slf4j.version>
         <dbunit.version>2.7.3</dbunit.version>
-        <lis-dbunit.version>1.0.5-SNAPSHOT</lis-dbunit.version>
+        <lis-dbunit.version>1.0.5</lis-dbunit.version>
         <org.testcontainers.version>1.17.3</org.testcontainers.version>
         <maven-plugin-commons>1.0.0-SNAPSHOT</maven-plugin-commons>
     </properties>
@@ -53,11 +53,15 @@
         </dependency>
         <dependency>
             <groupId>com.link-intersystems.dbunit</groupId>
-            <artifactId>lis-dbunit-migration</artifactId>
+            <artifactId>lis-dbunit-migration-core</artifactId>
         </dependency>
         <dependency>
             <groupId>com.link-intersystems.dbunit</groupId>
-            <artifactId>lis-dbunit-flyway</artifactId>
+            <artifactId>lis-dbunit-migration-flyway</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.link-intersystems.dbunit</groupId>
+            <artifactId>lis-dbunit-migration-testcontainers</artifactId>
         </dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>
@@ -149,6 +153,13 @@
             <dependency>
                 <groupId>com.link-intersystems.dbunit</groupId>
                 <artifactId>lis-dbunit</artifactId>
+                <version>${lis-dbunit.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.link-intersystems.dbunit</groupId>
+                <artifactId>lis-dbunit-migration</artifactId>
                 <version>${lis-dbunit.version}</version>
                 <type>pom</type>
                 <scope>import</scope>

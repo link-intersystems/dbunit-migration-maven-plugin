@@ -1,5 +1,8 @@
-package com.link_intersystems.dbunit.maven;
+package com.link_intersystems.dbunit.maven.mojo;
 
+import com.link_intersystems.dbunit.maven.MavenTestProjectAssertions;
+import com.link_intersystems.dbunit.maven.MigratedDataSetAssertion;
+import com.link_intersystems.dbunit.maven.mojo.FlywayMigrateMojo;
 import com.link_intersystems.dbunit.stream.resource.file.DataSetFileConfig;
 import com.link_intersystems.maven.plugin.test.MavenTestProject;
 import com.link_intersystems.maven.plugin.test.TestMojo;
@@ -15,14 +18,12 @@ import java.io.IOException;
 /**
  * @author René Link {@literal <rene.link@link-intersystems.com>}
  */
-
 @ExtendWith(MojoTest.class)
-class FlywayMigrateMojoMinimalConfigTest {
+@MavenTestProject("/full-migration-configuration")
+class FlywayMigrateMojoFullConfigTest {
 
     @Test
-    @MavenTestProject("/minimal-migration-configuration")
     void execute(@TestMojo(goal = "flyway-migrate") FlywayMigrateMojo mojo, MavenProject mavenProject) throws Exception {
-
         mojo.execute();
 
         assertDataSetsMigrated(mavenProject.getBasedir());

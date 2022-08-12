@@ -1,12 +1,7 @@
 package com.link_intersystems.dbunit.migration.flyway;
 
-import com.link_intersystems.dbunit.flyway.FlywayMigrationConfig;
-import org.flywaydb.core.api.configuration.FluentConfiguration;
-
 import java.util.HashMap;
 import java.util.Map;
-
-import static java.util.Arrays.stream;
 
 /**
  * @author René Link {@literal <rene.link@link-intersystems.com>}
@@ -48,26 +43,6 @@ public class FlywayConfig {
 
     public void setLocations(String[] locations) {
         this.locations = locations;
-    }
-
-    public FlywayMigrationConfig getFlywayMigrationConfig() {
-        FlywayMigrationConfig migrationConfig = new FlywayMigrationConfig();
-        FluentConfiguration configure = org.flywaydb.core.Flyway.configure();
-
-        String[] locations = getLocations();
-        String[] effectiveLocations = stream(locations)
-                .map(this::ensureFlywayFilesystemPrefix)
-                .toArray(String[]::new);
-        configure.locations(effectiveLocations);
-        configure.placeholders(getPlaceholders());
-
-        migrationConfig.setFlywayConfiguration(configure);
-        migrationConfig.setSourceVersion("1");
-        return migrationConfig;
-    }
-
-    private String ensureFlywayFilesystemPrefix(String location) {
-        return "filesystem:".concat(location);
     }
 
 

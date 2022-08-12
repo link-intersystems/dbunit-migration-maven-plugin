@@ -1,4 +1,4 @@
-package com.link_intersystems.dbunit.maven;
+package com.link_intersystems.dbunit.maven.autoconfig;
 
 import com.link_intersystems.dbunit.migration.flyway.FlywayConfig;
 import com.link_intersystems.io.FileScanner;
@@ -10,6 +10,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * @author René Link {@literal <rene.link@link-intersystems.com>}
  */
@@ -20,7 +22,7 @@ public class FlywayAutoConfig {
     private MavenProject project;
 
     public FlywayAutoConfig(MavenProject project) {
-        this.project = project;
+        this.project = requireNonNull(project);
     }
 
     public void configure(FlywayConfig flyway) {

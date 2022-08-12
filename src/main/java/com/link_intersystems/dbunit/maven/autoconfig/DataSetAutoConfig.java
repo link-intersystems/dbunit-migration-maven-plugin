@@ -1,4 +1,4 @@
-package com.link_intersystems.dbunit.maven;
+package com.link_intersystems.dbunit.maven.autoconfig;
 
 import com.link_intersystems.dbunit.migration.datasets.DataSetsConfig;
 import org.apache.maven.model.Resource;
@@ -10,6 +10,8 @@ import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluator
 import java.io.File;
 import java.util.List;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * @author René Link {@literal <rene.link@link-intersystems.com>}
  */
@@ -19,8 +21,8 @@ public class DataSetAutoConfig {
     private final ExpressionEvaluator expressionEvaluator;
 
     public DataSetAutoConfig(MavenProject project, ExpressionEvaluator expressionEvaluator) {
-        this.project = project;
-        this.expressionEvaluator = expressionEvaluator;
+        this.project = requireNonNull(project);
+        this.expressionEvaluator = requireNonNull(expressionEvaluator);
     }
 
     public void configure(DataSetsConfig dataSets) throws MojoExecutionException {

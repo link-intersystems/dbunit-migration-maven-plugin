@@ -1,5 +1,6 @@
-package com.link_intersystems.dbunit.maven;
+package com.link_intersystems.dbunit.maven.mojo;
 
+import com.link_intersystems.dbunit.maven.mojo.FlywayMigrateMojo;
 import com.link_intersystems.maven.plugin.test.MavenTestProject;
 import com.link_intersystems.maven.plugin.test.TestMojo;
 import com.link_intersystems.maven.plugin.test.extensions.MojoTest;

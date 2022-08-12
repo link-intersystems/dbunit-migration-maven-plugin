@@ -1,8 +1,8 @@
-package com.link_intersystems.dbunit.maven;
+package com.link_intersystems.dbunit.maven.autoconfig;
 
 import com.link_intersystems.dbunit.migration.datasets.DataSetsConfig;
-import com.link_intersystems.dbunit.migration.resources.DataSetFileLocations;
-import com.link_intersystems.dbunit.migration.resources.DefaultDataSetFileLocations;
+import com.link_intersystems.dbunit.stream.resource.file.DataSetFileLocations;
+import com.link_intersystems.dbunit.stream.resource.file.DefaultDataSetFileLocations;
 import com.link_intersystems.io.FileScanner;
 import org.apache.maven.project.MavenProject;
 
@@ -10,6 +10,8 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * @author René Link {@literal <rene.link@link-intersystems.com>}
@@ -20,8 +22,8 @@ public class DataSetsConfigFileLocations implements DataSetFileLocations {
     private DataSetsConfig dataSetsConfig;
 
     public DataSetsConfigFileLocations(MavenProject project, DataSetsConfig dataSetsConfig) {
-        this.project = project;
-        this.dataSetsConfig = dataSetsConfig;
+        this.project = requireNonNull(project);
+        this.dataSetsConfig = requireNonNull(dataSetsConfig);
     }
 
     @Override

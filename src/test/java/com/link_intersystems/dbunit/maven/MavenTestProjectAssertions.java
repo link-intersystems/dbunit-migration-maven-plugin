@@ -1,9 +1,9 @@
 package com.link_intersystems.dbunit.maven;
 
 import com.link_intersystems.dbunit.stream.consumer.CopyDataSetConsumer;
+import com.link_intersystems.dbunit.stream.resource.detection.DataSetFileDetection;
 import com.link_intersystems.dbunit.stream.resource.file.DataSetFile;
 import com.link_intersystems.dbunit.stream.resource.file.DataSetFileConfig;
-import com.link_intersystems.dbunit.stream.resource.file.DataSetFileDetection;
 import com.link_intersystems.io.FileScanner;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
@@ -19,7 +19,6 @@ import java.util.Objects;
  */
 public class MavenTestProjectAssertions {
 
-    private FileScanner interpolationFileScanner = new FileScanner();
     private DataSetFileDetection dataSetFileDetection = new DataSetFileDetection();
 
     private File basedir;
@@ -27,6 +26,7 @@ public class MavenTestProjectAssertions {
     public MavenTestProjectAssertions(File basedir) {
         this.basedir = Objects.requireNonNull(basedir);
 
+        FileScanner interpolationFileScanner = new FileScanner();
         interpolationFileScanner.addIncludeFilePattern("**/pom.xml", "pom.xml");
     }
 

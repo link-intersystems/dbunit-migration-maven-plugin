@@ -1,20 +1,22 @@
-package com.link_intersystems.dbunit.maven;
+package com.link_intersystems.dbunit.maven.mojo;
 
-import com.link_intersystems.dbunit.migration.collection.AbstractLoggingDataSetsMigrationListener;
+import com.link_intersystems.dbunit.migration.resources.AbstractLoggingDataSetResourcesMigrationListener;
 import org.apache.maven.plugin.logging.Log;
 import org.dbunit.dataset.DataSetException;
 
 import java.util.function.Supplier;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * @author René Link {@literal <rene.link@link-intersystems.com>}
  */
-class MavenLogAdapter extends AbstractLoggingDataSetsMigrationListener {
+public class MavenLogMigrationListener extends AbstractLoggingDataSetResourcesMigrationListener {
 
     private Log log;
 
-    public MavenLogAdapter(Log log) {
-        this.log = log;
+    public MavenLogMigrationListener(Log log) {
+        this.log = requireNonNull(log);
     }
 
     @Override
