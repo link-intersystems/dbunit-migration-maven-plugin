@@ -1,6 +1,7 @@
 ![Java CI with Maven](https://github.com/link-intersystems/dbunit-migration-maven-plugin/workflows/Java%20CI%20with%20Maven/badge.svg)
 [![Coverage Status](https://coveralls.io/repos/github/link-intersystems/dbunit-migration-maven-plugin/badge.svg?branch=master)](https://coveralls.io/github/link-intersystems/dbunit-migration-maven-plugin?branch=master)
 [![Maven Central](https://img.shields.io/maven-central/v/com.link-intersystems.dbunit.maven/dbunit-migration-maven-plugin)](https://mvnrepository.com/artifact/com.link-intersystems.dbunit.maven)
+[![Open Issues](https://img.shields.io/github/issues/link-intersystems/dbunit-migration-maven-plugin)](https://github.com/link-intersystems/dbunit-migration-maven-plugin/issues)
 
 The dbunit-migration-maven-plugin is a tool to migrate a collection of [DBUnit](http://dbunit.sourceforge.net/) data set files from one database schema
 version to another with the use of [Flyway](https://flywaydb.org/) and [testcontainers](https://www.testcontainers.org/).
