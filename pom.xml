@@ -14,14 +14,14 @@
     <version>1.0.2-SNAPSHOT</version>
 
     <properties>
-        <lis-commons.version>1.7.1</lis-commons.version>
+        <lis-commons.version>1.7.2-SNAPSHOT</lis-commons.version>
         <junit.jupiter.version>5.8.2</junit.jupiter.version>
         <mockito.version>4.4.0</mockito.version>
         <slf4j.version>1.7.36</slf4j.version>
         <dbunit.version>2.7.3</dbunit.version>
-        <lis-dbunit.version>1.0.5</lis-dbunit.version>
+        <lis-dbunit.version>1.0.6-SNAPSHOT</lis-dbunit.version>
         <org.testcontainers.version>1.17.3</org.testcontainers.version>
-        <maven-plugin-commons>1.0.0</maven-plugin-commons>
+        <maven-plugin-commons>1.0.1-SNAPSHOT</maven-plugin-commons>
     </properties>
 
     <dependencies>
@@ -51,22 +51,20 @@
             <artifactId>lis-commons-io</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.link-intersystems.dbunit</groupId>
+            <groupId>com.link-intersystems.dbunit.migration</groupId>
             <artifactId>lis-dbunit-migration-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.link-intersystems.dbunit</groupId>
+            <groupId>com.link-intersystems.dbunit.migration</groupId>
             <artifactId>lis-dbunit-migration-flyway</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.link-intersystems.dbunit</groupId>
+            <groupId>com.link-intersystems.dbunit.migration</groupId>
             <artifactId>lis-dbunit-migration-testcontainers</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>${org.testcontainers.version}</version>
-            <scope>compile</scope>
+            <groupId>com.link-intersystems.dbunit.testcontainers</groupId>
+            <artifactId>lis-dbunit-testcontainers-postgres</artifactId>
         </dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>
@@ -157,8 +155,15 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
-                <groupId>com.link-intersystems.dbunit</groupId>
+                <groupId>com.link-intersystems.dbunit.migration</groupId>
                 <artifactId>lis-dbunit-migration</artifactId>
+                <version>${lis-dbunit.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.link-intersystems.dbunit.testcontainers</groupId>
+                <artifactId>lis-dbunit-testcontainers</artifactId>
                 <version>${lis-dbunit.version}</version>
                 <type>pom</type>
                 <scope>import</scope>

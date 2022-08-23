@@ -23,6 +23,7 @@ import com.link_intersystems.dbunit.stream.resource.file.DataSetFileConfig;
 import com.link_intersystems.dbunit.stream.resource.file.DataSetFileLocations;
 import com.link_intersystems.dbunit.table.DefaultTableOrder;
 import com.link_intersystems.dbunit.table.TableOrder;
+import com.link_intersystems.maven.logging.slf4j.Slf4JMavenLogAdapter;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecution;
@@ -79,6 +80,7 @@ public class FlywayMigrateMojo extends AbstractMojo {
 
     protected void executeMigration() {
         DataSetResourcesMigration dataSetsMigrations = new DataSetResourcesMigration();
+        dataSetsMigrations.setLogger(new Slf4JMavenLogAdapter(getLog()));
 
         configureMigrationTransformer(dataSetsMigrations);
 
@@ -86,7 +88,7 @@ public class FlywayMigrateMojo extends AbstractMojo {
 
         TargetDataSetResourceSupplier targetDataSetResourceSupplier = getTargetDataSetResourceSupplier(dataSets);
         dataSetsMigrations.setTargetDataSetResourceSupplier(targetDataSetResourceSupplier);
-        dataSetsMigrations.setBeforeMigration(getBeforeMigrationTransformer());
+        dataSetsMigrations.setBeforeMigrationSupplier(this::getBeforeMigrationTransformer);
         dataSetsMigrations.setMigrationListener(getMigrationListener());
 
         List<DataSetResource> dataSetResources = getDataSetResources();

@@ -24,7 +24,7 @@ class FlywayMigrateMojoMinimalConfigTest {
 
     @Test
     @MavenTestProject("/minimal-migration-configuration")
-    void execute(@TestMojo(goal = "flyway-migrate") FlywayMigrateMojo mojo, MavenProject mavenProject) throws Exception {
+    void execute(@TestMojo(goal = "flyway-migrate", debugEnabled = true) FlywayMigrateMojo mojo, MavenProject mavenProject) throws Exception {
 
         mojo.execute();
 

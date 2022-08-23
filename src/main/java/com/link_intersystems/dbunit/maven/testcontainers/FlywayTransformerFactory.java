@@ -1,11 +1,11 @@
 package com.link_intersystems.dbunit.maven.testcontainers;
 
+import com.link_intersystems.dbunit.migration.DatabaseMigrationSupport;
 import com.link_intersystems.dbunit.migration.MigrationDataSetTransformerFactory;
 import com.link_intersystems.dbunit.migration.testcontainers.GenericContainerConfig;
 import com.link_intersystems.dbunit.migration.testcontainers.TestcontainersConfig;
 import com.link_intersystems.dbunit.migration.testcontainers.TestcontainersMigrationDataSetTransformerFactory;
 import com.link_intersystems.dbunit.stream.consumer.DataSetTransormer;
-import com.link_intersystems.dbunit.stream.consumer.DatabaseMigrationSupport;
 import com.link_intersystems.dbunit.testcontainers.DatabaseContainerSupport;
 import com.link_intersystems.dbunit.testcontainers.DefaultDatabaseContainerSupport;
 import com.link_intersystems.maven.logging.slf4j.Slf4JMavenLogAdapter;
