@@ -14,7 +14,7 @@
                 <version>#{version}</version>
                 <configuration>
 					<migration>
-						<concurrency>2</concurrency>
+						<concurrency>5</concurrency>
 					</migration>
 					<flyway>
 					    <sourceVersion>1</sourceVersion>
@@ -34,6 +34,8 @@
 						<charset>UTF-8</charset>
 						<resources>
 							<resource>src/test/resources/tiny-sakila-csv</resource>
+							<resource>src/test/resources/tiny-sakila-csv2</resource>
+							<resource>src/test/resources/tiny-sakila-csv3</resource>
 							<resource>glob:**/*.xml</resource>
 							<resource>glob:*.xml</resource>
 							<resource>glob:**/*.xls</resource>

@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Objects;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 /**
  * @author René Link {@literal <rene.link@link-intersystems.com>}
  */
@@ -38,6 +40,7 @@ public class MavenTestProjectAssertions {
         Path dataSetPath = basedir.toPath().resolve(dataSetPathname);
 
         DataSetFile dataSetFile = dataSetFileDetection.detect(dataSetPath.toFile());
+        assertNotNull(dataSetFile, dataSetPathname);
         IDataSetProducer dataSetProducer = dataSetFile.createProducer();
 
         CopyDataSetConsumer copyDataSetConsumer = new CopyDataSetConsumer();

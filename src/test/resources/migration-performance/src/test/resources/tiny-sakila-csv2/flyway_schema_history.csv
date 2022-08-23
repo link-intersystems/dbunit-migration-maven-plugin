@@ -1,0 +1,2 @@
+installed_rank, version, description, type, script, checksum, installed_by, installed_on, execution_time, success
+"1","1","create tables","SQL","V1__create_tables.sql","264526574","test","2022-07-23 04:41:44.0","4898","true"

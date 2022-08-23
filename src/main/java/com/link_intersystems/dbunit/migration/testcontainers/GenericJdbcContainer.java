@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.JdbcDatabaseContainer;
+import org.testcontainers.containers.wait.strategy.HostPortWaitStrategy;
 import org.testcontainers.utility.DockerImageName;
 
 import java.util.List;
@@ -29,6 +30,7 @@ public class GenericJdbcContainer extends JdbcDatabaseContainer<GenericJdbcConta
     private ContainerConfigurer<GenericJdbcContainer> startedContainerConfigurer;
 
     public GenericJdbcContainer(String dockerImageName) {
+
         super(DockerImageName.parse(dockerImageName));
     }
 
@@ -111,7 +113,7 @@ public class GenericJdbcContainer extends JdbcDatabaseContainer<GenericJdbcConta
 
     @Override
     protected void waitUntilContainerStarted() {
-        getWaitStrategy().waitUntilReady(this);
+        new HostPortWaitStrategy().waitUntilReady(this);
     }
 
     @Override
@@ -121,5 +123,9 @@ public class GenericJdbcContainer extends JdbcDatabaseContainer<GenericJdbcConta
         if (startedContainerConfigurer != null) {
             startedContainerConfigurer.configure(this);
         }
+
+        JdbcConnectionWaitStrategy jdbcConnectionWaitStrategy = new JdbcConnectionWaitStrategy(this);
+        jdbcConnectionWaitStrategy.setTestQueryString(getTestQueryString());
+        jdbcConnectionWaitStrategy.waitUntilReady(this);
     }
 }
