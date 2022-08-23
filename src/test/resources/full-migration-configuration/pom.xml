@@ -50,6 +50,7 @@
 					</dataSets>
 					<testcontainers>
 						<image>postgres:latest</image>
+						<logLevel>info</logLevel>
 						<containerConfig>
 							<dataSource>
 								<driverClassName>org.postgresql.Driver</driverClassName>

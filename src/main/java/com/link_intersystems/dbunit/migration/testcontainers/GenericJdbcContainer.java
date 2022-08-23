@@ -41,10 +41,7 @@ public class GenericJdbcContainer extends JdbcDatabaseContainer<GenericJdbcConta
 
     @Override
     protected Logger logger() {
-        if (logger.isDebugEnabled()) {
-            return logger;
-        }
-        return super.logger();
+        return logger;
     }
 
     public void setLogger(Logger logger) {

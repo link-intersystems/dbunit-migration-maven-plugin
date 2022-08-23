@@ -13,6 +13,8 @@ import com.link_intersystems.dbunit.testcontainers.DefaultDatabaseContainerSuppo
 import com.link_intersystems.dbunit.testcontainers.commons.CommonsRunningContainerPool;
 import com.link_intersystems.dbunit.testcontainers.pool.RunningContainerPool;
 import com.link_intersystems.maven.logging.ConcurrentLog;
+import com.link_intersystems.maven.logging.FilterLog;
+import com.link_intersystems.maven.logging.Level;
 import com.link_intersystems.maven.logging.ThreadAwareLog;
 import com.link_intersystems.maven.logging.slf4j.Slf4JMavenLogAdapter;
 import org.apache.maven.plugin.logging.Log;
@@ -41,8 +43,12 @@ public class FlywayTransformerFactory implements MigrationDataSetTransformerFact
 
     @Override
     public DataSetTransormer createTransformer(DatabaseMigrationSupport databaseMigrationSupport) {
-        Slf4JMavenLogAdapter mavenLogAdapter = new Slf4JMavenLogAdapter(new ThreadAwareLog(new ConcurrentLog(log)));
-        DatabaseContainerSupport containerSupport = getDatabaseContainerSupport(testcontainersConfig, mavenLogAdapter);
+        FilterLog filteredLog = new FilterLog(new ThreadAwareLog(new ConcurrentLog(log)));
+
+        Level logLevel = testcontainersConfig.getLogLevel();
+        filteredLog.setLevel(logLevel);
+
+        DatabaseContainerSupport containerSupport = getDatabaseContainerSupport(testcontainersConfig, new Slf4JMavenLogAdapter(filteredLog));
         RunningContainerPool containerPool = CommonsRunningContainerPool.createPool(() -> new DBunitJdbcContainer(containerSupport), migration.getConcurrency());
         TestcontainersMigrationDataSetTransformerFactory migrationDataSetTransformerFactory = new TestcontainersMigrationDataSetTransformerFactory(containerPool);
 
