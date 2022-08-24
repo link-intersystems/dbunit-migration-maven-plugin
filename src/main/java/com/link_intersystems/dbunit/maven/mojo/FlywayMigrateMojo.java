@@ -3,7 +3,7 @@ package com.link_intersystems.dbunit.maven.mojo;
 import com.link_intersystems.dbunit.maven.autoconfig.DataSetAutoConfig;
 import com.link_intersystems.dbunit.maven.autoconfig.DataSetsConfigFileLocations;
 import com.link_intersystems.dbunit.maven.autoconfig.FlywayAutoConfig;
-import com.link_intersystems.dbunit.maven.testcontainers.FlywayTransformerFactory;
+import com.link_intersystems.dbunit.maven.mojo.testcontainers.FlywayTransformerFactory;
 import com.link_intersystems.dbunit.migration.MigrationConfig;
 import com.link_intersystems.dbunit.migration.datasets.DataSetsConfig;
 import com.link_intersystems.dbunit.migration.flyway.FlywayConfig;

@@ -40,14 +40,6 @@ public class MavenLogMigrationListener extends AbstractLoggingDataSetResourcesMi
     }
 
     @Override
-    protected void logResourcesSupplied(String s, Supplier<String> supplier) {
-        log.info(s);
-        if (log.isDebugEnabled()) {
-            log.debug(supplier.get());
-        }
-    }
-
-    @Override
     protected void logMigrationsFinished(String s, Supplier<String> supplier) {
         log.info(s);
         if (log.isDebugEnabled()) {

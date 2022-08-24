@@ -1,4 +1,4 @@
-package com.link_intersystems.dbunit.maven.testcontainers;
+package com.link_intersystems.dbunit.maven.mojo.testcontainers;
 
 import com.link_intersystems.dbunit.migration.testcontainers.*;
 import org.codehaus.plexus.interpolation.InterpolationException;
