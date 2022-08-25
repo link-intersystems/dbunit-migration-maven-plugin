@@ -16,13 +16,15 @@
 
     <properties>
         <lis-commons.version>1.7.2-SNAPSHOT</lis-commons.version>
+        <lis-dbunit.version>1.0.6-SNAPSHOT</lis-dbunit.version>
+        <maven-plugin-commons>1.0.1-SNAPSHOT</maven-plugin-commons>
+
+        <dbunit.version>2.7.3</dbunit.version>
+        <org.testcontainers.version>1.17.3</org.testcontainers.version>
+        <slf4j.version>1.7.36</slf4j.version>
+
         <junit.jupiter.version>5.8.2</junit.jupiter.version>
         <mockito.version>4.4.0</mockito.version>
-        <slf4j.version>1.7.36</slf4j.version>
-        <dbunit.version>2.7.3</dbunit.version>
-        <lis-dbunit.version>1.0.6-SNAPSHOT</lis-dbunit.version>
-        <org.testcontainers.version>1.17.3</org.testcontainers.version>
-        <maven-plugin-commons>1.0.1-SNAPSHOT</maven-plugin-commons>
     </properties>
 
     <dependencies>
