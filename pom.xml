@@ -15,7 +15,7 @@
 
     <properties>
         <lis-commons.version>1.8.0</lis-commons.version>
-        <lis-dbunit.version>1.0.6</lis-dbunit.version>
+        <lis-dbunit.version>1.1.0</lis-dbunit.version>
         <maven-plugin-commons>1.0.1</maven-plugin-commons>
 
         <dbunit.version>2.7.3</dbunit.version>

@@ -2,11 +2,11 @@ package com.link_intersystems.dbunit.maven.mojo.testcontainers;
 
 import com.link_intersystems.dbunit.migration.DatabaseMigrationSupport;
 import com.link_intersystems.dbunit.migration.MigrationConfig;
-import com.link_intersystems.dbunit.migration.MigrationDataSetTransformerFactory;
+import com.link_intersystems.dbunit.migration.MigrationDataSetPipeFactory;
 import com.link_intersystems.dbunit.migration.testcontainers.GenericContainerConfig;
 import com.link_intersystems.dbunit.migration.testcontainers.TestcontainersConfig;
-import com.link_intersystems.dbunit.migration.testcontainers.TestcontainersMigrationDataSetTransformerFactory;
-import com.link_intersystems.dbunit.stream.consumer.DataSetTransormer;
+import com.link_intersystems.dbunit.migration.testcontainers.TestcontainersMigrationDataSetPipeFactory;
+import com.link_intersystems.dbunit.stream.consumer.DataSetConsumerPipe;
 import com.link_intersystems.dbunit.testcontainers.DBunitJdbcContainer;
 import com.link_intersystems.dbunit.testcontainers.DatabaseContainerSupport;
 import com.link_intersystems.dbunit.testcontainers.DefaultDatabaseContainerSupport;
@@ -29,7 +29,7 @@ import static java.util.Objects.requireNonNull;
 /**
  * @author René Link {@literal <rene.link@link-intersystems.com>}
  */
-public class FlywayTransformerFactory implements MigrationDataSetTransformerFactory {
+public class FlywayTransformerFactory implements MigrationDataSetPipeFactory {
 
     private TestcontainersConfig testcontainersConfig;
     private MigrationConfig migration;
@@ -42,7 +42,7 @@ public class FlywayTransformerFactory implements MigrationDataSetTransformerFact
     }
 
     @Override
-    public DataSetTransormer createTransformer(DatabaseMigrationSupport databaseMigrationSupport) {
+    public DataSetConsumerPipe createMigrationPipe(DatabaseMigrationSupport databaseMigrationSupport) {
         FilterLog filteredLog = new FilterLog(new ThreadAwareLog(new ConcurrentLog(log)));
 
         Level logLevel = testcontainersConfig.getLogLevel();
@@ -50,9 +50,9 @@ public class FlywayTransformerFactory implements MigrationDataSetTransformerFact
 
         DatabaseContainerSupport containerSupport = getDatabaseContainerSupport(testcontainersConfig, new Slf4JMavenLogAdapter(filteredLog));
         RunningContainerPool containerPool = CommonsRunningContainerPool.createPool(() -> new DBunitJdbcContainer(containerSupport), migration.getConcurrency());
-        TestcontainersMigrationDataSetTransformerFactory migrationDataSetTransformerFactory = new TestcontainersMigrationDataSetTransformerFactory(containerPool);
+        TestcontainersMigrationDataSetPipeFactory pipeFactory = new TestcontainersMigrationDataSetPipeFactory(containerPool);
 
-        return migrationDataSetTransformerFactory.createTransformer(databaseMigrationSupport);
+        return pipeFactory.createMigrationPipe(databaseMigrationSupport);
     }
 
     protected DatabaseContainerSupport getDatabaseContainerSupport(TestcontainersConfig testcontainersConfig, Logger logger) {

@@ -14,8 +14,7 @@ import com.link_intersystems.dbunit.migration.resources.DataSetResourcesMigratio
 import com.link_intersystems.dbunit.migration.resources.RebaseTargetpathDataSetResourceSupplier;
 import com.link_intersystems.dbunit.migration.resources.TargetDataSetResourceSupplier;
 import com.link_intersystems.dbunit.migration.testcontainers.TestcontainersConfig;
-import com.link_intersystems.dbunit.stream.consumer.DataSetConsumerPipeTransformerAdapter;
-import com.link_intersystems.dbunit.stream.consumer.DataSetTransormer;
+import com.link_intersystems.dbunit.stream.consumer.ChainableDataSetConsumer;
 import com.link_intersystems.dbunit.stream.consumer.ExternalSortTableConsumer;
 import com.link_intersystems.dbunit.stream.resource.DataSetResource;
 import com.link_intersystems.dbunit.stream.resource.detection.DataSetFileDetection;
@@ -136,12 +135,12 @@ public class FlywayMigrateMojo extends AbstractMojo {
         return new RebaseTargetpathDataSetResourceSupplier(basepath, targetPath);
     }
 
-    protected DataSetTransormer getBeforeMigrationTransformer() {
+    protected ChainableDataSetConsumer getBeforeMigrationTransformer() {
         String[] tableOrderConfig = dataSets.getTableOrder();
         if (tableOrderConfig != null) {
             TableOrder tableOrder = new DefaultTableOrder(tableOrderConfig);
             ExternalSortTableConsumer externalSortTableConsumer = new ExternalSortTableConsumer(tableOrder);
-            return new DataSetConsumerPipeTransformerAdapter(externalSortTableConsumer);
+            return externalSortTableConsumer;
         }
         return null;
     }
