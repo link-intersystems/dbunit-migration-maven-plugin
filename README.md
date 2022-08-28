@@ -20,7 +20,7 @@ The overall process the plugin implements is:
 Run the plugin with
 
 ```
-mvn com.link-intersystems.dbunit.maven:dbunit-migration-maven-plugin:1.0.0:flyway-migrate.
+mvn com.link-intersystems.dbunit.maven:dbunit-migration-maven-plugin:1.0.3:flyway-migrate.
 ```
 
 The plugin will output the files it migrates.
