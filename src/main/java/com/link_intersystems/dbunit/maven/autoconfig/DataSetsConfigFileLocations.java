@@ -41,6 +41,8 @@ public class DataSetsConfigFileLocations implements DataSetFileLocations {
                     "*.xml",
                     "**/*.xls",
                     "*.xls",
+                    "**/*.sql",
+                    "*.sql",
                     "**/table-ordering.txt",
                     "table-ordering.txt"
             );

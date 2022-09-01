@@ -6,27 +6,19 @@ import com.link_intersystems.dbunit.maven.autoconfig.FlywayAutoConfig;
 import com.link_intersystems.dbunit.maven.mojo.testcontainers.FlywayTransformerFactory;
 import com.link_intersystems.dbunit.migration.MigrationConfig;
 import com.link_intersystems.dbunit.migration.datasets.DataSetsConfig;
+import com.link_intersystems.dbunit.migration.datasets.DataSetsMigrationParticipant;
 import com.link_intersystems.dbunit.migration.flyway.FlywayConfig;
-import com.link_intersystems.dbunit.migration.flyway.FlywayDatabaseMigrationSupport;
-import com.link_intersystems.dbunit.migration.flyway.FlywayMigrationConfig;
-import com.link_intersystems.dbunit.migration.flyway.FlywayMigrationConfigFactory;
+import com.link_intersystems.dbunit.migration.flyway.FlywayMigrationParticipant;
 import com.link_intersystems.dbunit.migration.resources.DataSetResourcesMigration;
-import com.link_intersystems.dbunit.migration.resources.RebaseTargetpathDataSetResourceSupplier;
-import com.link_intersystems.dbunit.migration.resources.TargetDataSetResourceSupplier;
 import com.link_intersystems.dbunit.migration.testcontainers.TestcontainersConfig;
-import com.link_intersystems.dbunit.stream.consumer.ChainableDataSetConsumer;
-import com.link_intersystems.dbunit.stream.consumer.ExternalSortTableConsumer;
 import com.link_intersystems.dbunit.stream.resource.DataSetResource;
 import com.link_intersystems.dbunit.stream.resource.detection.DataSetFileDetection;
 import com.link_intersystems.dbunit.stream.resource.detection.DetectingDataSetFileResourcesSupplier;
-import com.link_intersystems.dbunit.stream.resource.file.DataSetFileConfig;
 import com.link_intersystems.dbunit.stream.resource.file.DataSetFileLocations;
-import com.link_intersystems.dbunit.stream.resource.file.xml.FlatXmlDataSetFileConfig;
-import com.link_intersystems.dbunit.table.DefaultTableOrder;
-import com.link_intersystems.dbunit.table.TableOrder;
 import com.link_intersystems.maven.logging.ConcurrentLog;
 import com.link_intersystems.maven.logging.ThreadAwareLog;
 import com.link_intersystems.maven.logging.slf4j.Slf4JMavenLogAdapter;
+import com.link_intersystems.util.config.properties.ConfigProperties;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecution;
@@ -37,8 +29,8 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluator;
+import org.slf4j.Logger;
 
-import java.nio.file.Path;
 import java.util.List;
 import java.util.concurrent.Executors;
 
@@ -88,80 +80,51 @@ public class FlywayMigrateMojo extends AbstractMojo {
 
     protected void validateConfigurations() throws MojoExecutionException {
         migration.validate();
-
     }
 
     protected void executeMigration() {
         DataSetResourcesMigration dataSetResourcesMigration = new DataSetResourcesMigration();
-        ThreadAwareLog threadAwareLog = new ThreadAwareLog(new ConcurrentLog(getLog()));
-        Slf4JMavenLogAdapter logger = new Slf4JMavenLogAdapter(threadAwareLog);
-        dataSetResourcesMigration.setLogger(logger);
 
-        configureMigrationTransformer(dataSetResourcesMigration);
+        Logger logger = getSlf4JLogger();
+        dataSetResourcesMigration.setLogger(logger);
         dataSetResourcesMigration.setExecutorService(Executors.newFixedThreadPool(migration.getConcurrency()));
 
-        configureMigrationSupport(dataSetResourcesMigration);
+        FlywayMigrationParticipant flywayMigrationParticipant = new FlywayMigrationParticipant(flyway, getFlywayTransformerFactory());
+        flywayMigrationParticipant.configure(dataSetResourcesMigration);
 
-        TargetDataSetResourceSupplier targetDataSetResourceSupplier = getTargetDataSetResourceSupplier(dataSets);
-        dataSetResourcesMigration.setTargetDataSetResourceSupplier(targetDataSetResourceSupplier);
-        dataSetResourcesMigration.setBeforeMigrationSupplier(this::getBeforeMigrationTransformer);
-        dataSetResourcesMigration.setMigrationListener(getMigrationListener());
+        DataSetsMigrationParticipant dataSetsMigrationParticipant = new DataSetsMigrationParticipant(dataSets);
+        dataSetsMigrationParticipant.configure(dataSetResourcesMigration);
+        dataSetsMigrationParticipant.setLogger(logger);
 
-        List<DataSetResource> dataSetResources = getDataSetResources();
+        ConfigProperties config = new ConfigProperties();
+        flywayMigrationParticipant.applyConfigProperties(config);
+        dataSetsMigrationParticipant.applyConfigProperties(config);
+
+        List<DataSetResource> dataSetResources = getDataSetResources(config);
+
         dataSetResourcesMigration.exec(dataSetResources);
     }
 
 
-    protected void configureMigrationTransformer(DataSetResourcesMigration dataSetsMigrations) {
+    /*
+     * TODO Would be better to use the Slf4J mechanism (LoggerFactoryBinder) to adapt the maven log.
+     */
+    protected Logger getSlf4JLogger() {
+        return new Slf4JMavenLogAdapter(new ThreadAwareLog(new ConcurrentLog(getLog())));
+    }
+
+    public FlywayTransformerFactory getFlywayTransformerFactory() {
         Log mavenLog = getLog();
-        FlywayTransformerFactory migrationDataSetTransformerFactory = new FlywayTransformerFactory(testcontainers, migration, mavenLog);
-        dataSetsMigrations.setMigrationDataSetTransformerFactory(migrationDataSetTransformerFactory);
+        return new FlywayTransformerFactory(testcontainers, migration, mavenLog);
     }
 
-    protected void configureMigrationSupport(DataSetResourcesMigration dataSetsMigrations) {
-        FlywayMigrationConfig flywayMigrationConfig = getFlywayMigrationConfig();
-        FlywayDatabaseMigrationSupport databaseMigrationSupport = new FlywayDatabaseMigrationSupport(flywayMigrationConfig);
-        dataSetsMigrations.setDatabaseMigrationSupport(databaseMigrationSupport);
-    }
-
-    protected FlywayMigrationConfig getFlywayMigrationConfig() {
-        FlywayMigrationConfigFactory flywayMigrationConfigFactory = new FlywayMigrationConfigFactory();
-        return flywayMigrationConfigFactory.create(flyway);
-
-    }
-
-    protected TargetDataSetResourceSupplier getTargetDataSetResourceSupplier(DataSetsConfig dataSets) {
-        Path basepath = dataSets.getBasepath();
-        Path targetPath = dataSets.getTargetBasepath();
-        return new RebaseTargetpathDataSetResourceSupplier(basepath, targetPath);
-    }
-
-    protected ChainableDataSetConsumer getBeforeMigrationTransformer() {
-        String[] tableOrderConfig = dataSets.getTableOrder();
-        if (tableOrderConfig != null) {
-            TableOrder tableOrder = new DefaultTableOrder(tableOrderConfig);
-            ExternalSortTableConsumer externalSortTableConsumer = new ExternalSortTableConsumer(tableOrder);
-            return externalSortTableConsumer;
-        }
-        return null;
-    }
-
-    protected MavenLogMigrationListener getMigrationListener() {
-        return new MavenLogMigrationListener(new ThreadAwareLog(getLog()));
-    }
-
-    protected List<DataSetResource> getDataSetResources() {
-        DataSetFileConfig config = new DataSetFileConfig();
-        config.setProperty(DataSetFileConfig.CHARSET_PROPERTY, dataSets.getCharset());
-        config.setProperty(FlatXmlDataSetFileConfig.COLUMN_SENSING_PROPERTY, dataSets.isColumnSensing());
-
+    protected List<DataSetResource> getDataSetResources(ConfigProperties config) {
         DataSetFileDetection fileDetection = new DataSetFileDetection();
-        fileDetection.setDataSetFileConfig(config);
+        fileDetection.setConfigProperties(config);
 
         DataSetFileLocations dataSetFileLocations = new DataSetsConfigFileLocations(project, dataSets);
         DetectingDataSetFileResourcesSupplier dataSetResourcesSupplier = new DetectingDataSetFileResourcesSupplier(dataSetFileLocations, fileDetection);
 
         return dataSetResourcesSupplier.getDataSetResources();
     }
-
 }

@@ -7,7 +7,7 @@
         </encoder>
     </appender>
 
-    <logger name="com.link_intersystems.dbunit.migration" level="off"/>
+    <logger name="com.link_intersystems.dbunit.migration" level="debug"/>
     <logger name="org.dbunit" level="off"/>
     <logger name="org.flywaydb" level="off"/>
 

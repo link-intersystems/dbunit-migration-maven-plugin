@@ -1,10 +1,11 @@
 package com.link_intersystems.dbunit.stream.resources.detection.file.sql;
 
+import com.link_intersystems.dbunit.stream.consumer.DataSetConsumerPipe;
 import com.link_intersystems.dbunit.stream.producer.db.DatabaseDataSetProducer;
 import com.link_intersystems.dbunit.stream.producer.db.DatabaseDataSetProducerConfig;
 import com.link_intersystems.dbunit.testcontainers.JdbcContainer;
 import com.link_intersystems.dbunit.testcontainers.consumer.DatabaseCustomizationConsumer;
-import com.link_intersystems.dbunit.testcontainers.consumer.DefaultContainerAwareDataSetConsumer;
+import com.link_intersystems.dbunit.testcontainers.consumer.JdbcContainerAwareDataSetConsumer;
 import com.link_intersystems.dbunit.testcontainers.consumer.TestContainersLifecycleConsumer;
 import com.link_intersystems.dbunit.testcontainers.pool.JdbcContainerPool;
 import com.link_intersystems.sql.io.SqlScript;
@@ -29,11 +30,14 @@ public class SqlScriptDataSetProducer implements IDataSetProducer {
 
     private SqlScript sqlScript;
     private DatabaseDataSetProducerConfig config = new DatabaseDataSetProducerConfig();
-    private SqlScript ddlScript;
+    private DatabaseCustomizationConsumer databaseCustomizationConsumer;
 
-    public SqlScriptDataSetProducer(SqlScript ddlScript, SqlScript dataScript) {
-        this.ddlScript = requireNonNull(ddlScript);
-        this.sqlScript = requireNonNull(dataScript);
+    public SqlScriptDataSetProducer(SqlScript sqlScript) {
+        this.sqlScript = requireNonNull(sqlScript);
+    }
+
+    public void setDatabaseCustomizationConsumer(DatabaseCustomizationConsumer databaseCustomizationConsumer) {
+        this.databaseCustomizationConsumer = databaseCustomizationConsumer;
     }
 
     public void setDatabaseDataSetProducerConfig(DatabaseDataSetProducerConfig config) {
@@ -45,29 +49,35 @@ public class SqlScriptDataSetProducer implements IDataSetProducer {
         this.dataSetConsumer = requireNonNull(consumer);
     }
 
-    public void setDatabaseContainerSupport(JdbcContainerPool containerPool) {
+    public void setJdbcContainerPool(JdbcContainerPool containerPool) {
         this.containerPool = requireNonNull(containerPool);
     }
 
     @Override
     public void produce() throws DataSetException {
         TestContainersLifecycleConsumer testContainersLifecycleConsumer = new TestContainersLifecycleConsumer(containerPool);
-        DatabaseCustomizationConsumer databaseCustomizationConsumer = new DatabaseCustomizationConsumer() {
+
+        DataSetConsumerPipe dataSetConsumerPipe = new DataSetConsumerPipe();
+
+        if (databaseCustomizationConsumer != null) {
+            dataSetConsumerPipe.add(databaseCustomizationConsumer);
+        }
+
+        dataSetConsumerPipe.add(new DatabaseCustomizationConsumer() {
 
             @Override
             protected void beforeStartDataSet(JdbcContainer jdbcContainer) throws Exception {
                 DataSource dataSource = jdbcContainer.getDataSource();
                 try (Connection connection = dataSource.getConnection()) {
-                    ddlScript.execute(connection);
                     sqlScript.execute(connection);
                 }
                 super.beforeStartDataSet(jdbcContainer);
             }
-        };
+        });
 
-        testContainersLifecycleConsumer.setSubsequentConsumer(databaseCustomizationConsumer);
+        testContainersLifecycleConsumer.setSubsequentConsumer(dataSetConsumerPipe);
 
-        DefaultContainerAwareDataSetConsumer consumerDelegate = new DefaultContainerAwareDataSetConsumer() {
+        dataSetConsumerPipe.add(new JdbcContainerAwareDataSetConsumer() {
 
             @Override
             protected void startDataSet(JdbcContainer jdbcContainer) throws DataSetException {
@@ -75,9 +85,7 @@ public class SqlScriptDataSetProducer implements IDataSetProducer {
 
                 produce(jdbcContainer);
             }
-        };
-
-        databaseCustomizationConsumer.setSubsequentConsumer(consumerDelegate);
+        });
 
         try {
             testContainersLifecycleConsumer.startDataSet();

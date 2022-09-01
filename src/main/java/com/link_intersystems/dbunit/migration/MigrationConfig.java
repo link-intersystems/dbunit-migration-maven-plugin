@@ -13,6 +13,10 @@ public class MigrationConfig {
         return concurrency;
     }
 
+    public void setConcurrency(int concurrency) {
+        this.concurrency = concurrency;
+    }
+
     public void validate() throws MojoExecutionException {
         if (concurrency < 1) {
             throw new MojoExecutionException("migration.concurrency must be 1 or greater, but is " + concurrency);

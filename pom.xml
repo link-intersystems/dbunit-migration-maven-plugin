@@ -14,7 +14,7 @@
     <version>1.0.4-SNAPSHOT</version>
 
     <properties>
-        <lis-commons.version>1.8.0</lis-commons.version>
+        <lis-commons.version>1.8.1-SNAPSHOT</lis-commons.version>
         <lis-dbunit.version>1.1.1-SNAPSHOT</lis-dbunit.version>
         <maven-plugin-commons>1.0.1</maven-plugin-commons>
 
@@ -51,6 +51,10 @@
         <dependency>
             <groupId>com.link-intersystems.commons</groupId>
             <artifactId>lis-commons-io</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.link-intersystems.commons</groupId>
+            <artifactId>lis-commons-sql</artifactId>
         </dependency>
         <dependency>
             <groupId>com.link-intersystems.dbunit.migration</groupId>

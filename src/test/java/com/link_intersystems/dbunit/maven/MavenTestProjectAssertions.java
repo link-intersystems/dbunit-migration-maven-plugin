@@ -3,8 +3,8 @@ package com.link_intersystems.dbunit.maven;
 import com.link_intersystems.dbunit.stream.consumer.CopyDataSetConsumer;
 import com.link_intersystems.dbunit.stream.resource.detection.DataSetFileDetection;
 import com.link_intersystems.dbunit.stream.resource.file.DataSetFile;
-import com.link_intersystems.dbunit.stream.resource.file.DataSetFileConfig;
 import com.link_intersystems.io.FileScanner;
+import com.link_intersystems.util.config.properties.ConfigProperties;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.stream.IDataSetProducer;
@@ -32,8 +32,8 @@ public class MavenTestProjectAssertions {
         interpolationFileScanner.addIncludeFilePattern("**/pom.xml", "pom.xml");
     }
 
-    public void setDataSetFileConfig(DataSetFileConfig dataSetFileConfig) {
-        dataSetFileDetection.setDataSetFileConfig(dataSetFileConfig);
+    public void setConfigProperties(ConfigProperties configProperties) {
+        dataSetFileDetection.setConfigProperties(configProperties);
     }
 
     public void assertDataSet(String dataSetPathname, DataSetAssertion dataSetAssertion) throws IOException, DataSetException {

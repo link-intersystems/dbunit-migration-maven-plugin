@@ -11,6 +11,7 @@ import com.link_intersystems.dbunit.testcontainers.DBunitJdbcContainer;
 import com.link_intersystems.dbunit.testcontainers.DatabaseContainerSupport;
 import com.link_intersystems.dbunit.testcontainers.DefaultDatabaseContainerSupport;
 import com.link_intersystems.dbunit.testcontainers.commons.CommonsJdbcContainerPool;
+import com.link_intersystems.dbunit.testcontainers.pool.JdbcContainerPool;
 import com.link_intersystems.maven.logging.ConcurrentLog;
 import com.link_intersystems.maven.logging.FilterLog;
 import com.link_intersystems.maven.logging.Level;
@@ -42,6 +43,13 @@ public class FlywayTransformerFactory implements MigrationDataSetPipeFactory {
 
     @Override
     public DataSetConsumerPipe createMigrationPipe(DatabaseMigrationSupport databaseMigrationSupport) {
+        JdbcContainerPool containerPool = createContainerPool();
+        TestcontainersMigrationDataSetPipeFactory pipeFactory = new TestcontainersMigrationDataSetPipeFactory(containerPool);
+
+        return pipeFactory.createMigrationPipe(databaseMigrationSupport);
+    }
+
+    public JdbcContainerPool createContainerPool() {
         FilterLog filteredLog = new FilterLog(new ThreadAwareLog(new ConcurrentLog(log)));
 
         Level logLevel = testcontainersConfig.getLogLevel();
@@ -49,9 +57,7 @@ public class FlywayTransformerFactory implements MigrationDataSetPipeFactory {
 
         DatabaseContainerSupport containerSupport = getDatabaseContainerSupport(testcontainersConfig, new Slf4JMavenLogAdapter(filteredLog));
         CommonsJdbcContainerPool containerPool = CommonsJdbcContainerPool.createPool(() -> new DBunitJdbcContainer(containerSupport), migration.getConcurrency());
-        TestcontainersMigrationDataSetPipeFactory pipeFactory = new TestcontainersMigrationDataSetPipeFactory(containerPool);
-
-        return pipeFactory.createMigrationPipe(databaseMigrationSupport);
+        return containerPool;
     }
 
     protected DatabaseContainerSupport getDatabaseContainerSupport(TestcontainersConfig testcontainersConfig, Logger logger) {
