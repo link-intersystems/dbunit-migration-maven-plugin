@@ -21,6 +21,7 @@ import com.link_intersystems.dbunit.stream.resource.detection.DataSetFileDetecti
 import com.link_intersystems.dbunit.stream.resource.detection.DetectingDataSetFileResourcesSupplier;
 import com.link_intersystems.dbunit.stream.resource.file.DataSetFileConfig;
 import com.link_intersystems.dbunit.stream.resource.file.DataSetFileLocations;
+import com.link_intersystems.dbunit.stream.resource.file.xml.FlatXmlDataSetFileConfig;
 import com.link_intersystems.dbunit.table.DefaultTableOrder;
 import com.link_intersystems.dbunit.table.TableOrder;
 import com.link_intersystems.maven.logging.ConcurrentLog;
@@ -151,8 +152,8 @@ public class FlywayMigrateMojo extends AbstractMojo {
 
     protected List<DataSetResource> getDataSetResources() {
         DataSetFileConfig config = new DataSetFileConfig();
-        config.setCharset(dataSets.getCharset());
-        config.setColumnSensing(dataSets.isColumnSensing());
+        config.setProperty(DataSetFileConfig.CHARSET_PROPERTY, dataSets.getCharset());
+        config.setProperty(FlatXmlDataSetFileConfig.COLUMN_SENSING_PROPERTY, dataSets.isColumnSensing());
 
         DataSetFileDetection fileDetection = new DataSetFileDetection();
         fileDetection.setDataSetFileConfig(config);

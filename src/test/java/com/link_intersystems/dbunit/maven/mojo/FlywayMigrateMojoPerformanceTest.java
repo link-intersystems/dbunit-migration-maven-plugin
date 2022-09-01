@@ -3,6 +3,7 @@ package com.link_intersystems.dbunit.maven.mojo;
 import com.link_intersystems.dbunit.maven.MavenTestProjectAssertions;
 import com.link_intersystems.dbunit.maven.MigratedDataSetAssertion;
 import com.link_intersystems.dbunit.stream.resource.file.DataSetFileConfig;
+import com.link_intersystems.dbunit.stream.resource.file.xml.FlatXmlDataSetFileConfig;
 import com.link_intersystems.maven.plugin.test.MavenTestProject;
 import com.link_intersystems.maven.plugin.test.TestMojo;
 import com.link_intersystems.maven.plugin.test.extensions.MojoTest;
@@ -35,7 +36,7 @@ class FlywayMigrateMojoPerformanceTest {
     private void assertDataSetsMigrated(File basedir) throws IOException, DataSetException {
         MavenTestProjectAssertions testMavenProject = new MavenTestProjectAssertions(basedir);
         DataSetFileConfig dataSetFileConfig = new DataSetFileConfig();
-        dataSetFileConfig.setColumnSensing(true);
+        dataSetFileConfig.setProperty(FlatXmlDataSetFileConfig.COLUMN_SENSING_PROPERTY, true);
         testMavenProject.setDataSetFileConfig(dataSetFileConfig);
 
         testMavenProject.assertDataSet("target/flat/tiny-sakila-flat.xml", MigratedDataSetAssertion::assertDataSetMigrated);
