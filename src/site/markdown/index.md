@@ -1,11 +1,9 @@
-# ${project.name}
-
 ## Introduction
 
-The dbunit-migration-maven-plugin is a tool to migrate a collection of {{{http://dbunit.sourceforge.net/}DBUnit}} data
+The dbunit-migration-maven-plugin is a tool to migrate a collection of [DBUnit](http://dbunit.sourceforge.net/) data
 set files from one database schema
-version to another with the use of {{{https://flywaydb.org/}Flyway}} and
-{{{https://www.testcontainers.org/}testcontainers}}.
+version to another with the use of [Flyway](https://flywaydb.org/) and
+[testcontainers](https://www.testcontainers.org/).
 
 Currently, it supports the following dataset types:
 
