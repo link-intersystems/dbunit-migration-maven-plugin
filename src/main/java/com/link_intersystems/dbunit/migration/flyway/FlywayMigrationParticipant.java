@@ -1,6 +1,6 @@
 package com.link_intersystems.dbunit.migration.flyway;
 
-import com.link_intersystems.dbunit.maven.mojo.testcontainers.FlywayTransformerFactory;
+import com.link_intersystems.dbunit.maven.testcontainers.FlywayTestcontainersMigrationDataSetPipeFactory;
 import com.link_intersystems.dbunit.migration.resources.DataSetResourcesMigration;
 import com.link_intersystems.dbunit.stream.producer.db.DatabaseDataSetProducerConfig;
 import com.link_intersystems.dbunit.stream.resources.detection.file.sql.SqlDataSetFileConfig;
@@ -18,9 +18,9 @@ public class FlywayMigrationParticipant {
 
 
     private FlywayConfig flywayConfig;
-    private FlywayTransformerFactory flywayTransformerFactory;
+    private FlywayTestcontainersMigrationDataSetPipeFactory flywayTransformerFactory;
 
-    public FlywayMigrationParticipant(FlywayConfig flywayConfig, FlywayTransformerFactory flywayTransformerFactory) {
+    public FlywayMigrationParticipant(FlywayConfig flywayConfig, FlywayTestcontainersMigrationDataSetPipeFactory flywayTransformerFactory) {
         this.flywayConfig = flywayConfig;
         this.flywayTransformerFactory = flywayTransformerFactory;
     }

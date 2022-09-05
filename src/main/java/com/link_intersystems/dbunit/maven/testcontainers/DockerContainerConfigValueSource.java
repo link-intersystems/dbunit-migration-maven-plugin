@@ -1,4 +1,4 @@
-package com.link_intersystems.dbunit.maven.mojo.testcontainers;
+package com.link_intersystems.dbunit.maven.testcontainers;
 
 import com.link_intersystems.dbunit.migration.testcontainers.DockerContainerConfig;
 import org.codehaus.plexus.interpolation.AbstractValueSource;

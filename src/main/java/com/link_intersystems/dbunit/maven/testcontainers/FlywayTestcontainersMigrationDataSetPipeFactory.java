@@ -1,4 +1,4 @@
-package com.link_intersystems.dbunit.maven.mojo.testcontainers;
+package com.link_intersystems.dbunit.maven.testcontainers;
 
 import com.link_intersystems.dbunit.migration.DatabaseMigrationSupport;
 import com.link_intersystems.dbunit.migration.MigrationConfig;
@@ -29,13 +29,13 @@ import static java.util.Objects.requireNonNull;
 /**
  * @author René Link {@literal <rene.link@link-intersystems.com>}
  */
-public class FlywayTransformerFactory implements MigrationDataSetPipeFactory {
+public class FlywayTestcontainersMigrationDataSetPipeFactory implements MigrationDataSetPipeFactory {
 
     private TestcontainersConfig testcontainersConfig;
     private MigrationConfig migration;
     private Log log;
 
-    public FlywayTransformerFactory(TestcontainersConfig testcontainersConfig, MigrationConfig migration, Log log) {
+    public FlywayTestcontainersMigrationDataSetPipeFactory(TestcontainersConfig testcontainersConfig, MigrationConfig migration, Log log) {
         this.testcontainersConfig = requireNonNull(testcontainersConfig);
         this.migration = migration;
         this.log = requireNonNull(log);

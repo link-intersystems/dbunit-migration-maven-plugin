@@ -3,7 +3,7 @@ package com.link_intersystems.dbunit.maven.mojo;
 import com.link_intersystems.dbunit.maven.autoconfig.DataSetAutoConfig;
 import com.link_intersystems.dbunit.maven.autoconfig.DataSetsConfigFileLocations;
 import com.link_intersystems.dbunit.maven.autoconfig.FlywayAutoConfig;
-import com.link_intersystems.dbunit.maven.mojo.testcontainers.FlywayTransformerFactory;
+import com.link_intersystems.dbunit.maven.testcontainers.FlywayTestcontainersMigrationDataSetPipeFactory;
 import com.link_intersystems.dbunit.migration.MigrationConfig;
 import com.link_intersystems.dbunit.migration.datasets.DataSetsConfig;
 import com.link_intersystems.dbunit.migration.datasets.DataSetsMigrationParticipant;
@@ -113,9 +113,9 @@ public class FlywayMigrateMojo extends AbstractMojo {
         return new Slf4JMavenLogAdapter(new ThreadAwareLog(new ConcurrentLog(getLog())));
     }
 
-    public FlywayTransformerFactory getFlywayTransformerFactory() {
+    public FlywayTestcontainersMigrationDataSetPipeFactory getFlywayTransformerFactory() {
         Log mavenLog = getLog();
-        return new FlywayTransformerFactory(testcontainers, migration, mavenLog);
+        return new FlywayTestcontainersMigrationDataSetPipeFactory(testcontainers, migration, mavenLog);
     }
 
     protected List<DataSetResource> getDataSetResources(ConfigProperties config) {
