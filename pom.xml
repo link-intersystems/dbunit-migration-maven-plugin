@@ -296,6 +296,24 @@
                 </plugins>
             </build>
         </profile>
+        <profile>
+            <id>gh-pages</id>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-scm-publish-plugin</artifactId>
+                            <configuration>
+                                <scmBranch>gh-pages</scmBranch>
+                                <subDirectory>/</subDirectory>
+                                <content>${project.build.directory}/dbunit-migration-maven-plugin.git</content>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
     </profiles>
 
     <repositories>
