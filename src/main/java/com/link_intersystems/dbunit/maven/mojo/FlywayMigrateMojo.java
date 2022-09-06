@@ -35,6 +35,8 @@ import java.util.List;
 import java.util.concurrent.Executors;
 
 /**
+ * Migrates a collection of DBUnit data set files from one database schema version to another with the use of Flyway and testcontainers.
+ *
  * @author René Link {@literal <rene.link@link-intersystems.com>}
  */
 @Mojo(name = "flyway-migrate")
@@ -46,18 +48,45 @@ public class FlywayMigrateMojo extends AbstractMojo {
     @Parameter(property = "mojoExecution", readonly = true, required = true)
     protected MojoExecution mojoExecution;
 
-    @Parameter(defaultValue = "${session}")
+    @Parameter(defaultValue = "${session}", required = true, readonly = true)
     protected MavenSession mavenSession;
 
+    /**
+     * Flyway configuration.
+     * <p>
+     * see <a href="https://link-intersystems.github.io/dbunit-migration-maven-plugin/config-options.html#flyway-options">Flyway Options</a>
+     * </p>
+     */
     @Parameter
     protected FlywayConfig flyway = new FlywayConfig();
 
+    /**
+     * DataSet selection configuration.
+     * <p>
+     * see <a href="https://link-intersystems.github.io/dbunit-migration-maven-plugin/config-options.html#dataset-options">Dataset Options</a>
+     * </p>
+     */
     @Parameter
     protected DataSetsConfig dataSets = new DataSetsConfig();
+
+    /**
+     * Testcontainers database configuration.
+     *
+     * <p>
+     * see <a href="https://link-intersystems.github.io/dbunit-migration-maven-plugin/config-options.html#flyway-options">Flyway Option</a>
+     * </p>
+     */
 
     @Parameter
     protected TestcontainersConfig testcontainers = new TestcontainersConfig();
 
+    /**
+     * Migration process related configuration.
+     *
+     * <p>
+     * see <a href="https://link-intersystems.github.io/dbunit-migration-maven-plugin/config-options.html#testcontainers-options">Testcontainers Container Options</a>
+     * </p>
+     */
     @Parameter
     protected MigrationConfig migration = new MigrationConfig();
 

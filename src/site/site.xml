@@ -18,7 +18,10 @@
             <item name="Goals" href="./plugin-info.html"/>
             <item name="Usage" href="./usage.html"/>
             <item name="Config Options" href="./config-options.html"/>
-            <item name="License" href="https://www.apache.org/licenses/"/>
+            <item name="License" href="https://www.apache.org/licenses/LICENSE-2.0"/>
         </menu>
+
+        <menu ref="modules"/>
+        <menu ref="reports"/>
     </body>
 </project>

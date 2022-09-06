@@ -2,8 +2,8 @@ Usage
 
 # Minimal Plugin Configuration
 
-This minimal plugin configuration will pick up all data sets under <<<$\{project.basedir\}/src/test/resources>>>
-that are based on flyway version 1 and migrate them to to the latest flyway version. The result datasets are placed in <<<$\{project.build.directory\}>>>. The source directory structure will
+This minimal plugin configuration will pick up all data sets under `${project.basedir}/src/test/resources`
+that are based on flyway version 1 and migrate them to to the latest flyway version. The result datasets are placed in `${project.build.directory}`. The source directory structure will
 be maintained.
 
 
@@ -19,7 +19,7 @@ be maintained.
                     <sourceVersion>1</sourceVersion>
                 </flyway>
                 <testcontainers>
-                    <!-- ls-dbunit-testcontainers ships with support for postgres and mysql -->
+                    <!-- The plugin ships with support for postgres and mysql -->
                     <!-- If you need to use another container please read the Complete Plugin Configuration section. -->
                     <image>postgres:latest</image>
                 </testcontainers>
