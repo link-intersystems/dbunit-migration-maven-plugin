@@ -306,7 +306,6 @@
                             <configuration>
                                 <scmBranch>gh-pages</scmBranch>
                                 <subDirectory>/</subDirectory>
-                                <content>${project.build.directory}/dbunit-migration-maven-plugin.git</content>
                             </configuration>
                         </plugin>
                     </plugins>
