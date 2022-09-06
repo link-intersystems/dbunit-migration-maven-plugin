@@ -10,28 +10,33 @@
 
 <a class="jxr_linenumber" name="1" href="#1">1</a>   <strong class="jxr_keyword">package</strong> com.link_intersystems.dbunit.stream.resources.detection.file.sql;
 <a class="jxr_linenumber" name="2" href="#2">2</a>   
-<a class="jxr_linenumber" name="3" href="#3">3</a>   <strong class="jxr_keyword">import</strong> com.link_intersystems.dbunit.stream.producer.db.DatabaseDataSetProducerConfig;
-<a class="jxr_linenumber" name="4" href="#4">4</a>   <strong class="jxr_keyword">import</strong> com.link_intersystems.dbunit.testcontainers.consumer.DatabaseCustomizationConsumer;
-<a class="jxr_linenumber" name="5" href="#5">5</a>   <strong class="jxr_keyword">import</strong> com.link_intersystems.dbunit.testcontainers.pool.JdbcContainerPool;
-<a class="jxr_linenumber" name="6" href="#6">6</a>   <strong class="jxr_keyword">import</strong> com.link_intersystems.util.config.properties.ConfigProperty;
-<a class="jxr_linenumber" name="7" href="#7">7</a>   
-<a class="jxr_linenumber" name="8" href="#8">8</a>   <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="9" href="#9">9</a>   <em class="jxr_javadoccomment"> * @author René Link {@literal &lt;rene.link@link-intersystems.com&gt;}</em>
-<a class="jxr_linenumber" name="10" href="#10">10</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="11" href="#11">11</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">interface</strong> <a href="../../../../../../../../com/link_intersystems/dbunit/stream/resources/detection/file/sql/SqlDataSetFileConfig.html">SqlDataSetFileConfig</a> {
-<a class="jxr_linenumber" name="12" href="#12">12</a>  
-<a class="jxr_linenumber" name="13" href="#13">13</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> ConfigProperty&lt;DatabaseDataSetProducerConfig&gt; DATABASE_DATA_SET_PRODUCER_CONFIG = ConfigProperty.named(<span class="jxr_string">"databaseDataSetProducerConfig"</span>).typed(DatabaseDataSetProducerConfig.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="14" href="#14">14</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> ConfigProperty&lt;DatabaseCustomizationConsumer&gt; DATABASE_CUSTOMIZATION_CONSUMER = ConfigProperty.named(<span class="jxr_string">"databaseCustomizationConsumer"</span>).typed(DatabaseCustomizationConsumer.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="15" href="#15">15</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> ConfigProperty&lt;JdbcContainerPool&gt; JDBC_CONTAINER_POOL = ConfigProperty.named(<span class="jxr_string">"jdbcContainerPool"</span>).typed(JdbcContainerPool.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="16" href="#16">16</a>  
-<a class="jxr_linenumber" name="17" href="#17">17</a>      <strong class="jxr_keyword">public</strong> DatabaseDataSetProducerConfig getDatabaseDataSetProducerConfig();
-<a class="jxr_linenumber" name="18" href="#18">18</a>  
+<a class="jxr_linenumber" name="3" href="#3">3</a>   <strong class="jxr_keyword">import</strong> com.link_intersystems.dbunit.sql.consumer.DefaultTableLiteralFormatResolver;
+<a class="jxr_linenumber" name="4" href="#4">4</a>   <strong class="jxr_keyword">import</strong> com.link_intersystems.dbunit.sql.consumer.TableLiteralFormatResolver;
+<a class="jxr_linenumber" name="5" href="#5">5</a>   <strong class="jxr_keyword">import</strong> com.link_intersystems.dbunit.stream.producer.db.DatabaseDataSetProducerConfig;
+<a class="jxr_linenumber" name="6" href="#6">6</a>   <strong class="jxr_keyword">import</strong> com.link_intersystems.dbunit.testcontainers.consumer.DatabaseCustomizationConsumer;
+<a class="jxr_linenumber" name="7" href="#7">7</a>   <strong class="jxr_keyword">import</strong> com.link_intersystems.dbunit.testcontainers.pool.JdbcContainerPool;
+<a class="jxr_linenumber" name="8" href="#8">8</a>   <strong class="jxr_keyword">import</strong> com.link_intersystems.util.config.properties.ConfigProperty;
+<a class="jxr_linenumber" name="9" href="#9">9</a>   
+<a class="jxr_linenumber" name="10" href="#10">10</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="11" href="#11">11</a>  <em class="jxr_javadoccomment"> * @author René Link {@literal &lt;rene.link@link-intersystems.com&gt;}</em>
+<a class="jxr_linenumber" name="12" href="#12">12</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="13" href="#13">13</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">interface</strong> <a href="../../../../../../../../com/link_intersystems/dbunit/stream/resources/detection/file/sql/SqlDataSetFileConfig.html">SqlDataSetFileConfig</a> {
+<a class="jxr_linenumber" name="14" href="#14">14</a>  
+<a class="jxr_linenumber" name="15" href="#15">15</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> ConfigProperty&lt;DatabaseDataSetProducerConfig&gt; DATABASE_DATA_SET_PRODUCER_CONFIG = ConfigProperty.named(<span class="jxr_string">"databaseDataSetProducerConfig"</span>).typed(DatabaseDataSetProducerConfig.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="16" href="#16">16</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> ConfigProperty&lt;DatabaseCustomizationConsumer&gt; DATABASE_CUSTOMIZATION_CONSUMER = ConfigProperty.named(<span class="jxr_string">"databaseCustomizationConsumer"</span>).typed(DatabaseCustomizationConsumer.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="17" href="#17">17</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> ConfigProperty&lt;JdbcContainerPool&gt; JDBC_CONTAINER_POOL = ConfigProperty.named(<span class="jxr_string">"jdbcContainerPool"</span>).typed(JdbcContainerPool.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="18" href="#18">18</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> ConfigProperty&lt;TableLiteralFormatResolver&gt; TABLE_LITERAL_FORMAT_RESOLVER = ConfigProperty.named(<span class="jxr_string">"tableLiteralFormatResolver"</span>).typed(TableLiteralFormatResolver.<strong class="jxr_keyword">class</strong>).withDefaultValue(<strong class="jxr_keyword">new</strong> DefaultTableLiteralFormatResolver());
 <a class="jxr_linenumber" name="19" href="#19">19</a>  
-<a class="jxr_linenumber" name="20" href="#20">20</a>      <strong class="jxr_keyword">public</strong> DatabaseCustomizationConsumer getDatabaseCustomizationConsumer();
+<a class="jxr_linenumber" name="20" href="#20">20</a>      <strong class="jxr_keyword">public</strong> DatabaseDataSetProducerConfig getDatabaseDataSetProducerConfig();
 <a class="jxr_linenumber" name="21" href="#21">21</a>  
-<a class="jxr_linenumber" name="22" href="#22">22</a>      <strong class="jxr_keyword">public</strong> JdbcContainerPool getJdbcContainerPool();
-<a class="jxr_linenumber" name="23" href="#23">23</a>  
-<a class="jxr_linenumber" name="24" href="#24">24</a>  }
+<a class="jxr_linenumber" name="22" href="#22">22</a>  
+<a class="jxr_linenumber" name="23" href="#23">23</a>      <strong class="jxr_keyword">public</strong> DatabaseCustomizationConsumer getDatabaseCustomizationConsumer();
+<a class="jxr_linenumber" name="24" href="#24">24</a>  
+<a class="jxr_linenumber" name="25" href="#25">25</a>      <strong class="jxr_keyword">public</strong> JdbcContainerPool getJdbcContainerPool();
+<a class="jxr_linenumber" name="26" href="#26">26</a>  
+<a class="jxr_linenumber" name="27" href="#27">27</a>      <strong class="jxr_keyword">public</strong> TableLiteralFormatResolver getTableLiteralFormatResolver();
+<a class="jxr_linenumber" name="28" href="#28">28</a>  
+<a class="jxr_linenumber" name="29" href="#29">29</a>  }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>

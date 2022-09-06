@@ -110,8 +110,17 @@ be maintained.</p>
                     &lt;/placeholders&gt;
                 &lt;/flyway&gt;
                 &lt;dataSets&gt;
-                    &lt;columnSensing&gt;true&lt;/columnSensing&gt; &lt;!-- Turns on column sensing for flat xml data sets --&gt;
                     &lt;charset&gt;UTF-8&lt;/charset&gt; &lt;!-- the charset used to read text based data sets --&gt;
+                    
+                    &lt;flatXml&gt;
+                        &lt;!-- Turns on column sensing for flat xml data sets --&gt;
+                        &lt;columnSensing&gt;true&lt;/columnSensing&gt;
+                    &lt;/flatXml&gt;
+                    &lt;sql&gt;
+                        &lt;!-- An implementation of a TableLiteralFormatResolver. You can provide
+                         a custom implementation if you need to customize the way database values are formatted as an sql literal in an SQL script. --&gt;
+                        &lt;tableLiteralFormatResolverClassName&gt;com.link_intersystems.dbunit.sql.consumer.DefaultTableLiteralFormatResolver&lt;/tableLiteralFormatResolverClassName&gt;
+                    &lt;/sql&gt;
 
                     &lt;!-- the data sets to migrate --&gt;
                     &lt;resources&gt;

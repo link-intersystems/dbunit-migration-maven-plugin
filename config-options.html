@@ -64,8 +64,13 @@
 <h2><a name="Dataset_Options"></a>Dataset Options</h2>
 
 <div class="source"><pre class="prettyprint"><code class="language-xml">&lt;dataSets&gt;
-    &lt;columnSensing&gt;true&lt;/columnSensing&gt;
     &lt;charset&gt;UTF-8&lt;/charset&gt;
+    &lt;flatXml&gt;
+        &lt;columnSensing&gt;true&lt;/columnSensing&gt;
+    &lt;/flatXml&gt;
+    &lt;sql&gt;
+        &lt;tableLiteralFormatResolverClassName&gt;com.link_intersystems.dbunit.sql.consumer.DefaultTableLiteralFormatResolver&lt;/tableLiteralFormatResolverClassName&gt;
+    &lt;/sql&gt;
 
     &lt;resources&gt;
         &lt;resource&gt;src/test/resources/tiny-sakila-csv&lt;/resource&gt;
@@ -92,12 +97,21 @@
 </thead><tbody>
 
 <tr class="b">
-<td align="left">columnSensing</td>
-<td align="left">Turns on column sensing for flat xml datasets.<br /><br />For details take a look at <a class="externalLink" href="https://dbunit.org/faq.html#differentcolumnnumber">DBUnit FAQ</a></td></tr>
+<td align="left"><b>flatXml</b></td>
+<td align="left">Configuration options for flat xml dataset files.</td></tr>
 <tr class="a">
+<td align="left">flatXml.<b>columnSensing</b></td>
+<td align="left">Turns on column sensing for flat xml datasets.<br /><br />For details take a look at <a class="externalLink" href="https://dbunit.org/faq.html#differentcolumnnumber">DBUnit FAQ</a></td></tr>
+<tr class="b">
+<td align="left"><b>sql</b></td>
+<td align="left">Configuration options for sql script files.</td></tr>
+<tr class="a">
+<td align="left">sql.<b>tableLiteralFormatResolverClassName</b></td>
+<td align="left">An implementation of a <a class="externalLink" href="https://github.com/link-intersystems/dbunit-extensions/blob/master/lis-dbunit-sql/src/main/java/com/link_intersystems/dbunit/sql/consumer/TableLiteralFormatResolver.java">TableLiteralFormatResolver</a>. You can provide a custom implementation if you need to customize the way database values are formatted as an sql literal in an SQL script.</td></tr>
+<tr class="b">
 <td align="left">resources</td>
 <td align="left">A list of <code>&lt;resource</code>&gt; entries that describe which dataset resource should be processed. When the resource path starts with <code>glob:</code> it is interpreted as a glob pattern. For details take a look at  <a class="externalLink" href="https://docs.oracle.com/javase/8/docs/api/java/nio/file/FileSystem.html#getPathMatcher-java.lang.String-">FileSystem.getPathMatcher(String))</a></td></tr>
-<tr class="b">
+<tr class="a">
 <td align="left">tableOrder</td>
 <td align="left">A list of <code>&lt;tableOrder</code>&gt; entries that describe which table processing order. Can be used if foreign key constrains make trouble. The configured table order is also the order of the tables in the output datasets.</td></tr>
 </tbody>
