@@ -71,7 +71,9 @@
       
 <p><b>Description</b>:</p>
       
-<div>(no description)</div>
+<div>Migrates a collection of DBUnit data set files from one database
+schema version to another with the use of Flyway and
+testcontainers.</div>
       
 <p><b>Attributes</b>:</p>
       
@@ -105,8 +107,10 @@
             
 <td><code>-</code></td>
             
-<td>DataSet selection configuration. See <a class="externalLink" href="https://link-intersystems.github.io/dbunit-migration-maven-plugin/config-options.html">Config
-Options for details</a><br /></td>
+<td>DataSet selection configuration. 
+
+<p>see <a class="externalLink" href="https://link-intersystems.github.io/dbunit-migration-maven-plugin/config-options.html#dataset-options">Dataset
+Options</a></p><br /></td>
           </tr>
           
 <tr class="a">
@@ -117,21 +121,13 @@ Options for details</a><br /></td>
             
 <td><code>-</code></td>
             
-<td>(no description)<br /></td>
+<td>Flyway configuration. 
+
+<p>see <a class="externalLink" href="https://link-intersystems.github.io/dbunit-migration-maven-plugin/config-options.html#flyway-options">Flyway
+Options</a></p><br /></td>
           </tr>
           
 <tr class="b">
-            
-<td align="left"><code><a href="#mavenSession">&lt;mavenSession&gt;</a></code></td>
-            
-<td><code>MavenSession</code></td>
-            
-<td><code>-</code></td>
-            
-<td>(no description)<br /><b>Default value is</b>: <code>${session}</code>.<br /></td>
-          </tr>
-          
-<tr class="a">
             
 <td align="left"><code><a href="#migration">&lt;migration&gt;</a></code></td>
             
@@ -139,10 +135,13 @@ Options for details</a><br /></td>
             
 <td><code>-</code></td>
             
-<td>(no description)<br /></td>
+<td>Migration process related configuration. 
+
+<p>see <a class="externalLink" href="https://link-intersystems.github.io/dbunit-migration-maven-plugin/config-options.html#testcontainers-options">Testcontainers
+Container Options</a></p><br /></td>
           </tr>
           
-<tr class="b">
+<tr class="a">
             
 <td align="left"><code><a href="#testcontainers">&lt;testcontainers&gt;</a></code></td>
             
@@ -150,7 +149,10 @@ Options for details</a><br /></td>
             
 <td><code>-</code></td>
             
-<td>(no description)<br /></td>
+<td>Testcontainers database configuration. 
+
+<p>see <a class="externalLink" href="https://link-intersystems.github.io/dbunit-migration-maven-plugin/config-options.html#flyway-options">Flyway
+Option</a></p><br /></td>
           </tr>
         </table>
       </section>
@@ -159,8 +161,10 @@ Options for details</a><br /></td>
         <section>
 <h4><a name="a.3CdataSets.3E"></a><b><a name="dataSets">&lt;dataSets&gt;</a></b></h4>
         
-<div>DataSet selection configuration. See <a class="externalLink" href="https://link-intersystems.github.io/dbunit-migration-maven-plugin/config-options.html">Config
-Options for details</a></div>
+<div>DataSet selection configuration. 
+
+<p>see <a class="externalLink" href="https://link-intersystems.github.io/dbunit-migration-maven-plugin/config-options.html#dataset-options">Dataset
+Options</a></p></div>
         
 <ul>
           
@@ -170,7 +174,10 @@ Options for details</a></div>
         </ul><hr /></section><section>
 <h4><a name="a.3Cflyway.3E"></a><b><a name="flyway">&lt;flyway&gt;</a></b></h4>
         
-<div>(no description)</div>
+<div>Flyway configuration. 
+
+<p>see <a class="externalLink" href="https://link-intersystems.github.io/dbunit-migration-maven-plugin/config-options.html#flyway-options">Flyway
+Options</a></p></div>
         
 <ul>
           
@@ -178,21 +185,12 @@ Options for details</a></div>
           
 <li><b>Required</b>: <code>No</code></li>
         </ul><hr /></section><section>
-<h4><a name="a.3CmavenSession.3E"></a><b><a name="mavenSession">&lt;mavenSession&gt;</a></b></h4>
-        
-<div>(no description)</div>
-        
-<ul>
-          
-<li><b>Type</b>: <code>org.apache.maven.execution.MavenSession</code></li>
-          
-<li><b>Required</b>: <code>No</code></li>
-          
-<li><b>Default</b>: <code>${session}</code></li>
-        </ul><hr /></section><section>
 <h4><a name="a.3Cmigration.3E"></a><b><a name="migration">&lt;migration&gt;</a></b></h4>
         
-<div>(no description)</div>
+<div>Migration process related configuration. 
+
+<p>see <a class="externalLink" href="https://link-intersystems.github.io/dbunit-migration-maven-plugin/config-options.html#testcontainers-options">Testcontainers
+Container Options</a></p></div>
         
 <ul>
           
@@ -202,7 +200,10 @@ Options for details</a></div>
         </ul><hr /></section><section>
 <h4><a name="a.3Ctestcontainers.3E"></a><b><a name="testcontainers">&lt;testcontainers&gt;</a></b></h4>
         
-<div>(no description)</div>
+<div>Testcontainers database configuration. 
+
+<p>see <a class="externalLink" href="https://link-intersystems.github.io/dbunit-migration-maven-plugin/config-options.html#flyway-options">Flyway
+Option</a></p></div>
         
 <ul>
           
