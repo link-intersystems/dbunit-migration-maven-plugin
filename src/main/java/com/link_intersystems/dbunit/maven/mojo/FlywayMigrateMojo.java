@@ -73,7 +73,7 @@ public class FlywayMigrateMojo extends AbstractMojo {
      * Testcontainers database configuration.
      *
      * <p>
-     * see <a href="https://link-intersystems.github.io/dbunit-migration-maven-plugin/config-options.html#flyway-options">Flyway Option</a>
+     * see <a href="https://link-intersystems.github.io/dbunit-migration-maven-plugin/config-options.html#testcontainers-options">Testcontainers Container Options</a>
      * </p>
      */
 
@@ -84,7 +84,7 @@ public class FlywayMigrateMojo extends AbstractMojo {
      * Migration process related configuration.
      *
      * <p>
-     * see <a href="https://link-intersystems.github.io/dbunit-migration-maven-plugin/config-options.html#testcontainers-options">Testcontainers Container Options</a>
+     * see <a href="https://link-intersystems.github.io/dbunit-migration-maven-plugin/config-options.html#flyway-options">Flyway Option</a>
      * </p>
      */
     @Parameter
