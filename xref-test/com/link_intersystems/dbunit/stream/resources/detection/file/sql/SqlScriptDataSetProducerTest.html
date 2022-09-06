@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>SqlScriptDataSetProducerTest xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../../../../testapidocs/com/link_intersystems/dbunit/stream/resources/detection/file/sql/SqlScriptDataSetProducerTest.html">View Javadoc</a></div><pre>
+
+<a class="jxr_linenumber" name="1" href="#1">1</a>   <strong class="jxr_keyword">package</strong> com.link_intersystems.dbunit.stream.resources.detection.file.sql;
+<a class="jxr_linenumber" name="2" href="#2">2</a>   
+<a class="jxr_linenumber" name="3" href="#3">3</a>   
+<a class="jxr_linenumber" name="4" href="#4">4</a>   <strong class="jxr_keyword">import</strong> com.link_intersystems.dbunit.sql.consumer.SqlScriptDataSetConsumer;
+<a class="jxr_linenumber" name="5" href="#5">5</a>   <strong class="jxr_keyword">import</strong> com.link_intersystems.dbunit.testcontainers.DBunitJdbcContainer;
+<a class="jxr_linenumber" name="6" href="#6">6</a>   <strong class="jxr_keyword">import</strong> com.link_intersystems.dbunit.testcontainers.DatabaseContainerSupport;
+<a class="jxr_linenumber" name="7" href="#7">7</a>   <strong class="jxr_keyword">import</strong> com.link_intersystems.dbunit.testcontainers.JdbcContainer;
+<a class="jxr_linenumber" name="8" href="#8">8</a>   <strong class="jxr_keyword">import</strong> com.link_intersystems.dbunit.testcontainers.consumer.DatabaseCustomizationConsumer;
+<a class="jxr_linenumber" name="9" href="#9">9</a>   <strong class="jxr_keyword">import</strong> com.link_intersystems.dbunit.testcontainers.pool.SingleJdbcContainerPool;
+<a class="jxr_linenumber" name="10" href="#10">10</a>  <strong class="jxr_keyword">import</strong> com.link_intersystems.sql.io.SqlScript;
+<a class="jxr_linenumber" name="11" href="#11">11</a>  <strong class="jxr_keyword">import</strong> com.link_intersystems.sql.io.StatementReader;
+<a class="jxr_linenumber" name="12" href="#12">12</a>  <strong class="jxr_keyword">import</strong> com.link_intersystems.sql.io.URLScriptResource;
+<a class="jxr_linenumber" name="13" href="#13">13</a>  <strong class="jxr_keyword">import</strong> org.dbunit.dataset.DataSetException;
+<a class="jxr_linenumber" name="14" href="#14">14</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.Test;
+<a class="jxr_linenumber" name="15" href="#15">15</a>  
+<a class="jxr_linenumber" name="16" href="#16">16</a>  <strong class="jxr_keyword">import</strong> java.io.IOException;
+<a class="jxr_linenumber" name="17" href="#17">17</a>  <strong class="jxr_keyword">import</strong> java.io.StringReader;
+<a class="jxr_linenumber" name="18" href="#18">18</a>  <strong class="jxr_keyword">import</strong> java.io.StringWriter;
+<a class="jxr_linenumber" name="19" href="#19">19</a>  <strong class="jxr_keyword">import</strong> java.sql.Connection;
+<a class="jxr_linenumber" name="20" href="#20">20</a>  
+<a class="jxr_linenumber" name="21" href="#21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="22" href="#22">22</a>  
+<a class="jxr_linenumber" name="23" href="#23">23</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="24" href="#24">24</a>  <em class="jxr_javadoccomment"> * @author René Link {@literal &lt;rene.link@link-intersystems.com&gt;}</em>
+<a class="jxr_linenumber" name="25" href="#25">25</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="26" href="#26">26</a>  <strong class="jxr_keyword">class</strong> <a href="../../../../../../../../com/link_intersystems/dbunit/stream/resources/detection/file/sql/SqlScriptDataSetProducerTest.html">SqlScriptDataSetProducerTest</a> {
+<a class="jxr_linenumber" name="27" href="#27">27</a>  
+<a class="jxr_linenumber" name="28" href="#28">28</a>      @Test
+<a class="jxr_linenumber" name="29" href="#29">29</a>      <strong class="jxr_keyword">void</strong> produce() <strong class="jxr_keyword">throws</strong> DataSetException, IOException {
+<a class="jxr_linenumber" name="30" href="#30">30</a>          URLScriptResource urlScriptResource = <strong class="jxr_keyword">new</strong> URLScriptResource(SqlScriptDataSetProducerTest.<strong class="jxr_keyword">class</strong>.getResource(<span class="jxr_string">"sakila.sql"</span>));
+<a class="jxr_linenumber" name="31" href="#31">31</a>          SqlScript sqlScript = <strong class="jxr_keyword">new</strong> SqlScript(urlScriptResource);
+<a class="jxr_linenumber" name="32" href="#32">32</a>          SqlScript ddlScript = <strong class="jxr_keyword">new</strong> SqlScript(<strong class="jxr_keyword">new</strong> URLScriptResource(SqlScriptDataSetProducerTest.<strong class="jxr_keyword">class</strong>.getResource(<span class="jxr_string">"sakila-ddl.sql"</span>)));
+<a class="jxr_linenumber" name="33" href="#33">33</a>          SqlScriptDataSetProducer producer = <strong class="jxr_keyword">new</strong> SqlScriptDataSetProducer(sqlScript);
+<a class="jxr_linenumber" name="34" href="#34">34</a>  
+<a class="jxr_linenumber" name="35" href="#35">35</a>          producer.setDatabaseCustomizationConsumer(<strong class="jxr_keyword">new</strong> DatabaseCustomizationConsumer() {
+<a class="jxr_linenumber" name="36" href="#36">36</a>              @Override
+<a class="jxr_linenumber" name="37" href="#37">37</a>              <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> beforeStartDataSet(JdbcContainer jdbcContainer) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="38" href="#38">38</a>                  <strong class="jxr_keyword">try</strong> (Connection connection = jdbcContainer.getDatabaseConnection().getConnection()) {
+<a class="jxr_linenumber" name="39" href="#39">39</a>                      ddlScript.execute(connection);
+<a class="jxr_linenumber" name="40" href="#40">40</a>                  }
+<a class="jxr_linenumber" name="41" href="#41">41</a>              }
+<a class="jxr_linenumber" name="42" href="#42">42</a>          });
+<a class="jxr_linenumber" name="43" href="#43">43</a>  
+<a class="jxr_linenumber" name="44" href="#44">44</a>          producer.setJdbcContainerPool(<strong class="jxr_keyword">new</strong> SingleJdbcContainerPool(<strong class="jxr_keyword">new</strong> DBunitJdbcContainer(DatabaseContainerSupport.getDatabaseContainerSupport(<span class="jxr_string">"postgres:latest"</span>))));
+<a class="jxr_linenumber" name="45" href="#45">45</a>  
+<a class="jxr_linenumber" name="46" href="#46">46</a>          StringWriter sw = <strong class="jxr_keyword">new</strong> StringWriter();
+<a class="jxr_linenumber" name="47" href="#47">47</a>          producer.setConsumer(<strong class="jxr_keyword">new</strong> SqlScriptDataSetConsumer(sw));
+<a class="jxr_linenumber" name="48" href="#48">48</a>          producer.produce();
+<a class="jxr_linenumber" name="49" href="#49">49</a>  
+<a class="jxr_linenumber" name="50" href="#50">50</a>  
+<a class="jxr_linenumber" name="51" href="#51">51</a>          StatementReader statementReader = <strong class="jxr_keyword">new</strong> StatementReader(<strong class="jxr_keyword">new</strong> StringReader(sw.toString()));
+<a class="jxr_linenumber" name="52" href="#52">52</a>  
+<a class="jxr_linenumber" name="53" href="#53">53</a>          assertTrue(statementReader.hasNext());
+<a class="jxr_linenumber" name="54" href="#54">54</a>          assertEquals(<span class="jxr_string">"insert into actor (actor_id, first_name, last_name, last_update) values (1, 'PENELOPE', 'GUINESS', '2006-02-15 04:34:33')"</span>, statementReader.next());
+<a class="jxr_linenumber" name="55" href="#55">55</a>  
+<a class="jxr_linenumber" name="56" href="#56">56</a>          assertTrue(statementReader.hasNext());
+<a class="jxr_linenumber" name="57" href="#57">57</a>          assertEquals(<span class="jxr_string">"insert into actor (actor_id, first_name, last_name, last_update) values (2, 'NICK', 'WAHLBERG', '2006-02-15 04:34:33')"</span>, statementReader.next());
+<a class="jxr_linenumber" name="58" href="#58">58</a>  
+<a class="jxr_linenumber" name="59" href="#59">59</a>          assertTrue(statementReader.hasNext());
+<a class="jxr_linenumber" name="60" href="#60">60</a>  
+<a class="jxr_linenumber" name="61" href="#61">61</a>          assertEquals(<span class="jxr_string">"insert into film (film_id, title, description, release_year, language_id, original_language_id, rental_duration, rental_rate, length, replacement_cost, rating, special_features, last_update) values (1, 'ACADEMY DINOSAUR', 'A Epic Drama of a Feminist And a Mad Scientist who must Battle a Teacher in The Canadian Rockies', '2006-01-01', 1, null, 6, 0.99, 86, 20.99, 'PG', 'Deleted Scenes,Behind the Scenes', '2006-02-15 05:03:42')"</span>, statementReader.next());
+<a class="jxr_linenumber" name="62" href="#62">62</a>  
+<a class="jxr_linenumber" name="63" href="#63">63</a>          assertTrue(statementReader.hasNext());
+<a class="jxr_linenumber" name="64" href="#64">64</a>          assertEquals(<span class="jxr_string">"insert into film (film_id, title, description, release_year, language_id, original_language_id, rental_duration, rental_rate, length, replacement_cost, rating, special_features, last_update) values (23, 'ANACONDA CONFESSIONS', 'A Lacklusture Display of a Dentist And a Dentist who must Fight a Girl in Australia', '2006-01-01', 1, null, 3, 0.99, 92, 9.99, 'R', 'Trailers,Deleted Scenes', '2006-02-15 05:03:42')"</span>, statementReader.next());
+<a class="jxr_linenumber" name="65" href="#65">65</a>  
+<a class="jxr_linenumber" name="66" href="#66">66</a>          assertTrue(statementReader.hasNext());
+<a class="jxr_linenumber" name="67" href="#67">67</a>          assertEquals(<span class="jxr_string">"insert into film_actor (actor_id, film_id, last_update) values (1, 1, '2006-02-15 05:05:03')"</span>, statementReader.next());
+<a class="jxr_linenumber" name="68" href="#68">68</a>  
+<a class="jxr_linenumber" name="69" href="#69">69</a>          assertTrue(statementReader.hasNext());
+<a class="jxr_linenumber" name="70" href="#70">70</a>          assertEquals(<span class="jxr_string">"insert into film_actor (actor_id, film_id, last_update) values (1, 23, '2006-02-15 05:05:03')"</span>, statementReader.next());
+<a class="jxr_linenumber" name="71" href="#71">71</a>  
+<a class="jxr_linenumber" name="72" href="#72">72</a>          assertTrue(statementReader.hasNext());
+<a class="jxr_linenumber" name="73" href="#73">73</a>          assertEquals(<span class="jxr_string">"insert into language (language_id, name, last_update) values (1, 'English', '2006-02-15 05:02:19')"</span>, statementReader.next());
+<a class="jxr_linenumber" name="74" href="#74">74</a>  
+<a class="jxr_linenumber" name="75" href="#75">75</a>          assertFalse(statementReader.hasNext());
+<a class="jxr_linenumber" name="76" href="#76">76</a>      }
+<a class="jxr_linenumber" name="77" href="#77">77</a>  }
+</pre>
+<hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
+</html>

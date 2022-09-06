@@ -1,0 +1,8 @@
+com.link_intersystems.dbunit.maven.autoconfig
+com.link_intersystems.dbunit.maven.mojo
+com.link_intersystems.dbunit.maven.testcontainers
+com.link_intersystems.dbunit.migration
+com.link_intersystems.dbunit.migration.datasets
+com.link_intersystems.dbunit.migration.flyway
+com.link_intersystems.dbunit.migration.testcontainers
+com.link_intersystems.dbunit.stream.resources.detection.file.sql
