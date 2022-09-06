@@ -4,8 +4,13 @@
 
 ```xml
 <dataSets>
-    <columnSensing>true</columnSensing>
     <charset>UTF-8</charset>
+    <flatXml>
+        <columnSensing>true</columnSensing>
+    </flatXml>
+    <sql>
+        <tableLiteralFormatResolverClassName>com.link_intersystems.dbunit.sql.consumer.DefaultTableLiteralFormatResolver</tableLiteralFormatResolverClassName>
+    </sql>
 
     <resources>
         <resource>src/test/resources/tiny-sakila-csv</resource>
@@ -24,11 +29,14 @@
 </dataSets>
 ```
 
-| Option   | Description  |
-|--- |:----|
-| columnSensing | Turns on column sensing for flat xml datasets.<br/><br/>For details take a look at [DBUnit FAQ](https://dbunit.org/faq.html#differentcolumnnumber)|
-| resources | A list of `<resource`> entries that describe which dataset resource should be processed. When the resource path starts with `glob:` it is interpreted as a glob pattern. For details take a look at  [FileSystem.getPathMatcher(String))](https://docs.oracle.com/javase/8/docs/api/java/nio/file/FileSystem.html#getPathMatcher-java.lang.String-)  |
-| tableOrder | A list of `<tableOrder`> entries that describe which table processing order. Can be used if foreign key constrains make trouble. The configured table order is also the order of the tables in the output datasets.  |
+| Option                    | Description                                                                                                                                                                                                                                                                                                                                         |
+|---------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **flatXml**               | Configuration options for flat xml dataset files.                                                                                                                                                                                                                                                                                                   |
+| flatXml.**columnSensing** | Turns on column sensing for flat xml datasets.<br/><br/>For details take a look at [DBUnit FAQ](https://dbunit.org/faq.html#differentcolumnnumber)                                                                                                                                                                                                  |
+| **sql**                   | Configuration options for sql script files.                                                                                                                                                                                                                                                                                                         |
+| sql.**tableLiteralFormatResolverClassName**     | An implementation of a [TableLiteralFormatResolver](https://github.com/link-intersystems/dbunit-extensions/blob/master/lis-dbunit-sql/src/main/java/com/link_intersystems/dbunit/sql/consumer/TableLiteralFormatResolver.java). You can provide a custom implementation if you need to customize the way database values are formatted as an sql literal in an SQL script.                                                                                                                                                   |
+| resources                 | A list of `<resource`> entries that describe which dataset resource should be processed. When the resource path starts with `glob:` it is interpreted as a glob pattern. For details take a look at  [FileSystem.getPathMatcher(String))](https://docs.oracle.com/javase/8/docs/api/java/nio/file/FileSystem.html#getPathMatcher-java.lang.String-) |
+| tableOrder                | A list of `<tableOrder`> entries that describe which table processing order. Can be used if foreign key constrains make trouble. The configured table order is also the order of the tables in the output datasets.                                                                                                                                 |
 
 
 ## Flyway Options

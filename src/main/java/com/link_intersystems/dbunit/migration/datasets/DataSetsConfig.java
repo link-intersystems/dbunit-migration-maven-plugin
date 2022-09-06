@@ -15,16 +15,13 @@ public class DataSetsConfig {
     private File sourceBasedir;
     private String[] tableOrder;
     private File targetBasedir;
-    private boolean columnSensing;
+
     private String charset = "UTF-8";
 
-    public boolean isColumnSensing() {
-        return columnSensing;
-    }
+    private FlatXmlConfig flatXml = new FlatXmlConfig();
+    private SqlConfig sql = new SqlConfig();
 
-    public void setColumnSensing(boolean columnSensing) {
-        this.columnSensing = columnSensing;
-    }
+
 
     public boolean isDefaultResources() {
         return defaultResources || resources.length == 0;
@@ -93,5 +90,13 @@ public class DataSetsConfig {
 
     public void setCharset(Charset charset) {
         this.charset = charset.name();
+    }
+
+    public FlatXmlConfig getFlatXml() {
+        return flatXml;
+    }
+
+    public SqlConfig getSql() {
+        return sql;
     }
 }

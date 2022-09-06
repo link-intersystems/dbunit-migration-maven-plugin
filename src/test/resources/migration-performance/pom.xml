@@ -30,8 +30,10 @@
 						</placeholders>
 					</flyway>
 					<dataSets>
-						<columnSensing>true</columnSensing>
 						<charset>UTF-8</charset>
+						<flatXml>
+							<columnSensing>true</columnSensing>
+						</flatXml>
 						<resources>
 							<resource>src/test/resources/tiny-sakila-csv</resource>
 							<resource>src/test/resources/tiny-sakila-csv2</resource>

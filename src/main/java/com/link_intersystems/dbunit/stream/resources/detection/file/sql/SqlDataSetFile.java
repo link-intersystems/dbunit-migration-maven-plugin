@@ -1,6 +1,8 @@
 package com.link_intersystems.dbunit.stream.resources.detection.file.sql;
 
+import com.link_intersystems.dbunit.sql.consumer.DefaultTableLiteralFormatResolver;
 import com.link_intersystems.dbunit.sql.consumer.SqlScriptDataSetConsumer;
+import com.link_intersystems.dbunit.sql.consumer.TableLiteralFormatResolver;
 import com.link_intersystems.dbunit.stream.producer.db.DatabaseDataSetProducerConfig;
 import com.link_intersystems.dbunit.stream.resource.file.DataSetFile;
 import com.link_intersystems.dbunit.testcontainers.consumer.DatabaseCustomizationConsumer;
@@ -27,6 +29,7 @@ public class SqlDataSetFile implements DataSetFile {
     private DatabaseCustomizationConsumer beforeScriptCustomization;
     private DatabaseDataSetProducerConfig databaseDataSetProducerConfig = new DatabaseDataSetProducerConfig();
     private JdbcContainerPool jdbcContainerPool;
+    private TableLiteralFormatResolver tableLiteralFormatResolver = new DefaultTableLiteralFormatResolver();
 
 
     public SqlDataSetFile(File sqlScript) {
@@ -39,6 +42,10 @@ public class SqlDataSetFile implements DataSetFile {
         beforeScriptCustomization = sqlDataSetFile.beforeScriptCustomization;
         databaseDataSetProducerConfig = sqlDataSetFile.databaseDataSetProducerConfig;
         jdbcContainerPool = sqlDataSetFile.jdbcContainerPool;
+    }
+
+    public void setTableLiteralFormatResolver(TableLiteralFormatResolver tableLiteralFormatResolver) {
+        this.tableLiteralFormatResolver = requireNonNull(tableLiteralFormatResolver);
     }
 
     public void setCharset(Charset charset) {
@@ -80,6 +87,7 @@ public class SqlDataSetFile implements DataSetFile {
             SqlScriptDataSetConsumer sqlScriptDataSetConsumer = new SqlScriptDataSetConsumer(writer);
             String schema = databaseDataSetProducerConfig.getSchema();
             sqlScriptDataSetConsumer.setSchema(schema);
+            sqlScriptDataSetConsumer.setTableLiteralFormatResolver(tableLiteralFormatResolver);
             return sqlScriptDataSetConsumer;
         } catch (FileNotFoundException e) {
             throw new DataSetException(e);

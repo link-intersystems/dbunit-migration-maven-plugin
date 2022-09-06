@@ -24,6 +24,7 @@ public class SqlDataSetFileDetector implements DataSetFileDetector {
             sqlDataSetFile.setDatabaseDataSetProducerConfig(sqlDataSetFileConfig.getDatabaseDataSetProducerConfig());
             sqlDataSetFile.setBeforeScriptCustomization(sqlDataSetFileConfig.getDatabaseCustomizationConsumer());
             sqlDataSetFile.setJdbcContainerPool(sqlDataSetFileConfig.getJdbcContainerPool());
+            sqlDataSetFile.setTableLiteralFormatResolver(sqlDataSetFileConfig.getTableLiteralFormatResolver());
             return sqlDataSetFile;
         }
         return null;

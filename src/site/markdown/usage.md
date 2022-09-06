@@ -55,8 +55,17 @@ The next section shows you all possible [configuration options](./config-options
                     </placeholders>
                 </flyway>
                 <dataSets>
-                    <columnSensing>true</columnSensing> <!-- Turns on column sensing for flat xml data sets -->
                     <charset>UTF-8</charset> <!-- the charset used to read text based data sets -->
+                    
+                    <flatXml>
+                        <!-- Turns on column sensing for flat xml data sets -->
+                        <columnSensing>true</columnSensing>
+                    </flatXml>
+                    <sql>
+                        <!-- An implementation of a TableLiteralFormatResolver. You can provide
+                         a custom implementation if you need to customize the way database values are formatted as an sql literal in an SQL script. -->
+                        <tableLiteralFormatResolverClassName>com.link_intersystems.dbunit.sql.consumer.DefaultTableLiteralFormatResolver</tableLiteralFormatResolverClassName>
+                    </sql>
 
                     <!-- the data sets to migrate -->
                     <resources>

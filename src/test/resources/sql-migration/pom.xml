@@ -28,6 +28,9 @@
 					</flyway>
 					<dataSets>
 						<charset>UTF-8</charset>
+						<sql>
+							<tableLiteralFormatResolverClassName>com.link_intersystems.dbunit.sql.consumer.DefaultTableLiteralFormatResolver</tableLiteralFormatResolverClassName>
+						</sql>
 						<tableOrder>
 							<tableorder>language</tableorder>
 							<tableorder>film</tableorder>

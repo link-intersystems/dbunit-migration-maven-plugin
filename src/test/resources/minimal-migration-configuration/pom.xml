@@ -23,7 +23,9 @@
 						</placeholders>
 					</flyway>
 					<dataSets>
-						<columnSensing>true</columnSensing>
+						<flatXml>
+							<columnSensing>true</columnSensing>
+						</flatXml>
 						<tableOrder>
 							<tableorder>language</tableorder>
 							<tableorder>film</tableorder>

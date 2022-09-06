@@ -32,7 +32,8 @@ public class DataSetsMigrationParticipant {
 
     public void applyConfigProperties(ConfigProperties config) {
         config.setProperty(DataSetFileConfig.CHARSET, dataSetsConfig.getCharset());
-        config.setProperty(FlatXmlDataSetFileConfig.COLUMN_SENSING, dataSetsConfig.isColumnSensing());
+        FlatXmlConfig flatXml = dataSetsConfig.getFlatXml();
+        config.setProperty(FlatXmlDataSetFileConfig.COLUMN_SENSING, flatXml.isColumnSensing());
     }
 
     public void configure(DataSetResourcesMigration dataSetResourcesMigration) {
