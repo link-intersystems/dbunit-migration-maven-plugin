@@ -55,9 +55,11 @@ public class SqlScriptDataSetProducer implements IDataSetProducer {
 
     @Override
     public void produce() throws DataSetException {
-        TestContainersLifecycleConsumer testContainersLifecycleConsumer = new TestContainersLifecycleConsumer(containerPool);
-
         DataSetConsumerPipe dataSetConsumerPipe = new DataSetConsumerPipe();
+
+        TestContainersLifecycleConsumer testContainersLifecycleConsumer = new TestContainersLifecycleConsumer(containerPool);
+        dataSetConsumerPipe.add(testContainersLifecycleConsumer);
+
 
         if (databaseCustomizationConsumer != null) {
             dataSetConsumerPipe.add(databaseCustomizationConsumer);
@@ -75,8 +77,6 @@ public class SqlScriptDataSetProducer implements IDataSetProducer {
             }
         });
 
-        testContainersLifecycleConsumer.setSubsequentConsumer(dataSetConsumerPipe);
-
         dataSetConsumerPipe.add(new JdbcContainerAwareDataSetConsumer() {
 
             @Override
@@ -88,9 +88,9 @@ public class SqlScriptDataSetProducer implements IDataSetProducer {
         });
 
         try {
-            testContainersLifecycleConsumer.startDataSet();
+            dataSetConsumerPipe.startDataSet();
         } finally {
-            testContainersLifecycleConsumer.endDataSet();
+            dataSetConsumerPipe.endDataSet();
         }
     }
 
