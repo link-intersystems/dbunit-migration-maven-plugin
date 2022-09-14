@@ -1,7 +1,8 @@
 package com.link_intersystems.dbunit.migration.datasets;
 
-import com.link_intersystems.dbunit.sql.consumer.DefaultTableLiteralFormatResolver;
-import com.link_intersystems.dbunit.sql.consumer.TableLiteralFormatResolver;
+
+import com.link_intersystems.dbunit.stream.consumer.sql.DefaultTableLiteralFormatResolver;
+import com.link_intersystems.dbunit.stream.consumer.sql.TableLiteralFormatResolver;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -13,7 +14,7 @@ public class SqlConfig {
     private String tableLiteralFormatResolverClassName;
 
     public TableLiteralFormatResolver getTableLiteralFormatResolver() {
-        if(tableLiteralFormatResolverClassName != null){
+        if (tableLiteralFormatResolverClassName != null) {
             try {
                 Class<?> tableLiteralFormatResolverClass = Class.forName(this.tableLiteralFormatResolverClassName);
                 return (TableLiteralFormatResolver) tableLiteralFormatResolverClass.getDeclaredConstructor().newInstance();

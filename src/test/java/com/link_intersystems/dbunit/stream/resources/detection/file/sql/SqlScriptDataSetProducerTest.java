@@ -1,11 +1,11 @@
 package com.link_intersystems.dbunit.stream.resources.detection.file.sql;
 
 
-import com.link_intersystems.dbunit.sql.consumer.SqlScriptDataSetConsumer;
+import com.link_intersystems.dbunit.stream.consumer.sql.SqlScriptDataSetConsumer;
+import com.link_intersystems.dbunit.stream.producer.sql.SqlScriptDataSetProducer;
 import com.link_intersystems.dbunit.testcontainers.DBunitJdbcContainer;
 import com.link_intersystems.dbunit.testcontainers.DatabaseContainerSupport;
-import com.link_intersystems.dbunit.testcontainers.JdbcContainer;
-import com.link_intersystems.dbunit.testcontainers.consumer.DatabaseCustomizationConsumer;
+import com.link_intersystems.dbunit.testcontainers.TestcontainersDatabaseConnectionBorrower;
 import com.link_intersystems.dbunit.testcontainers.pool.SingleJdbcContainerPool;
 import com.link_intersystems.sql.io.SqlScript;
 import com.link_intersystems.sql.io.StatementReader;
@@ -30,18 +30,14 @@ class SqlScriptDataSetProducerTest {
         URLScriptResource urlScriptResource = new URLScriptResource(SqlScriptDataSetProducerTest.class.getResource("sakila.sql"));
         SqlScript sqlScript = new SqlScript(urlScriptResource);
         SqlScript ddlScript = new SqlScript(new URLScriptResource(SqlScriptDataSetProducerTest.class.getResource("sakila-ddl.sql")));
-        SqlScriptDataSetProducer producer = new SqlScriptDataSetProducer(sqlScript);
-
-        producer.setDatabaseCustomizationConsumer(new DatabaseCustomizationConsumer() {
-            @Override
-            protected void beforeStartDataSet(JdbcContainer jdbcContainer) throws Exception {
-                try (Connection connection = jdbcContainer.getDatabaseConnection().getConnection()) {
-                    ddlScript.execute(connection);
-                }
+        SingleJdbcContainerPool singleJdbcContainerPool = new SingleJdbcContainerPool(new DBunitJdbcContainer(DatabaseContainerSupport.getDatabaseContainerSupport("postgres:latest")));
+        TestcontainersDatabaseConnectionBorrower connectionBorrower = new TestcontainersDatabaseConnectionBorrower(singleJdbcContainerPool, jdbcContainer -> {
+            try (Connection connection = jdbcContainer.getDatabaseConnection().getConnection()) {
+                ddlScript.execute(connection);
             }
         });
 
-        producer.setJdbcContainerPool(new SingleJdbcContainerPool(new DBunitJdbcContainer(DatabaseContainerSupport.getDatabaseContainerSupport("postgres:latest"))));
+        SqlScriptDataSetProducer producer = new SqlScriptDataSetProducer(connectionBorrower, sqlScript);
 
         StringWriter sw = new StringWriter();
         producer.setConsumer(new SqlScriptDataSetConsumer(sw));

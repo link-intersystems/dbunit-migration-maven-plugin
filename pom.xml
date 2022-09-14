@@ -14,8 +14,8 @@
     <version>1.0.5-SNAPSHOT</version>
 
     <properties>
-        <lis-commons.version>1.8.1</lis-commons.version>
-        <lis-dbunit.version>1.1.1</lis-dbunit.version>
+        <lis-commons.version>1.8.2-SNAPSHOT</lis-commons.version>
+        <lis-dbunit.version>1.2.0-SNAPSHOT</lis-dbunit.version>
         <maven-plugin-commons>1.0.1</maven-plugin-commons>
 
         <dbunit.version>2.7.3</dbunit.version>
