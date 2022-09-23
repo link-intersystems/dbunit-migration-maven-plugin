@@ -10,7 +10,6 @@ import com.link_intersystems.util.config.properties.ConfigProperties;
 import org.apache.maven.project.MavenProject;
 import org.dbunit.dataset.DataSetException;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,7 +18,7 @@ import java.io.IOException;
  * @author René Link {@literal <rene.link@link-intersystems.com>}
  */
 
-@ExtendWith(MojoTest.class)
+@MojoTest
 class FlywayMigrateMojoMinimalConfigTest {
 
     @Test

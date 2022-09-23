@@ -10,12 +10,12 @@ import com.link_intersystems.sql.io.SqlScript;
 import com.link_intersystems.sql.io.StatementReader;
 import com.link_intersystems.sql.io.StringScriptResource;
 import org.apache.commons.io.IOUtils;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
 import org.dbunit.dataset.DataSetException;
 import org.flywaydb.core.api.MigrationVersion;
 import org.flywaydb.core.api.configuration.FluentConfiguration;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.testcontainers.containers.JdbcDatabaseContainer;
 
 import javax.sql.DataSource;
@@ -33,12 +33,12 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * @author René Link {@literal <rene.link@link-intersystems.com>}
  */
-@ExtendWith(MojoTest.class)
+@MojoTest
 @MavenTestProject("/sql-migration")
 class FlywayMigrateMojoSqlMigrationTest {
 
     @Test
-    void execute(@TestMojo(goal = "flyway-migrate", debugEnabled = true) FlywayMigrateMojo mojo, MavenProject mavenProject) throws Exception {
+    void execute(@TestMojo(goal = "flyway-migrate", debugEnabled = true, requiresDependencyResolution = ResolutionScope.COMPILE) FlywayMigrateMojo mojo, MavenProject mavenProject) throws Exception {
         mojo.execute();
 
         String outputDirectory = mavenProject.getBuild().getDirectory();
