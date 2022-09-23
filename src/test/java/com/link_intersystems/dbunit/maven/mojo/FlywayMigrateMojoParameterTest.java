@@ -1,11 +1,9 @@
 package com.link_intersystems.dbunit.maven.mojo;
 
-import com.link_intersystems.dbunit.maven.mojo.FlywayMigrateMojo;
 import com.link_intersystems.maven.plugin.test.MavenTestProject;
 import com.link_intersystems.maven.plugin.test.TestMojo;
 import com.link_intersystems.maven.plugin.test.extensions.MojoTest;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 /**
  * @author René Link {@literal <rene.link@link-intersystems.com>}
  */
-@ExtendWith(MojoTest.class)
+@MojoTest
 class FlywayMigrateMojoParameterTest {
 
     @Test

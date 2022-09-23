@@ -18,6 +18,7 @@ import com.link_intersystems.dbunit.stream.resource.file.DataSetFileLocations;
 import com.link_intersystems.maven.logging.ConcurrentLog;
 import com.link_intersystems.maven.logging.ThreadAwareLog;
 import com.link_intersystems.maven.logging.slf4j.Slf4JMavenLogAdapter;
+import com.link_intersystems.maven.project.MavenProjectResolver;
 import com.link_intersystems.util.config.properties.ConfigProperties;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
@@ -25,6 +26,7 @@ import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.PluginParameterExpressionEvaluator;
 import org.apache.maven.plugin.logging.Log;
+import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
@@ -90,6 +92,9 @@ public class FlywayMigrateMojo extends AbstractMojo {
     @Parameter
     protected MigrationConfig migration = new MigrationConfig();
 
+    @Component
+    private MavenProjectResolver mavenProjectResolver;
+
     @Override
     public void execute() throws MojoExecutionException {
         autoConfigure();
@@ -126,7 +131,7 @@ public class FlywayMigrateMojo extends AbstractMojo {
         dataSetsMigrationParticipant.setLogger(logger);
 
         ConfigProperties config = new ConfigProperties();
-        flywayMigrationParticipant.applyConfigProperties(config);
+        flywayMigrationParticipant.applyConfigProperties(project, config);
         dataSetsMigrationParticipant.applyConfigProperties(config);
 
         List<DataSetResource> dataSetResources = getDataSetResources(config);
