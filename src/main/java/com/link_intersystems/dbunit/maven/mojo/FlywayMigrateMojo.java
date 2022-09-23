@@ -126,7 +126,7 @@ public class FlywayMigrateMojo extends AbstractMojo {
         FlywayMigrationParticipant flywayMigrationParticipant = new FlywayMigrationParticipant(flyway, dataSets, getFlywayTransformerFactory());
         flywayMigrationParticipant.configure(dataSetResourcesMigration);
 
-        DataSetsMigrationParticipant dataSetsMigrationParticipant = new DataSetsMigrationParticipant(dataSets);
+        DataSetsMigrationParticipant dataSetsMigrationParticipant = new DataSetsMigrationParticipant(migration, dataSets);
         dataSetsMigrationParticipant.configure(dataSetResourcesMigration);
         dataSetsMigrationParticipant.setLogger(logger);
 
