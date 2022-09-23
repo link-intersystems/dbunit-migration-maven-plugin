@@ -1,5 +1,6 @@
 package com.link_intersystems.dbunit.migration.datasets;
 
+import com.link_intersystems.dbunit.migration.MigrationConfig;
 import com.link_intersystems.dbunit.migration.resources.*;
 import com.link_intersystems.dbunit.stream.consumer.ChainableDataSetConsumer;
 import com.link_intersystems.dbunit.stream.consumer.ExternalSortTableConsumer;
@@ -8,10 +9,13 @@ import com.link_intersystems.dbunit.stream.resource.file.xml.FlatXmlDataSetFileC
 import com.link_intersystems.dbunit.table.DefaultTableOrder;
 import com.link_intersystems.dbunit.table.TableOrder;
 import com.link_intersystems.util.config.properties.ConfigProperties;
+import org.dbunit.dataset.DataSetException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.file.Path;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * @author René Link {@literal <rene.link@link-intersystems.com>}
@@ -21,9 +25,11 @@ public class DataSetsMigrationParticipant {
     private Logger logger = LoggerFactory.getLogger(DataSetsMigrationParticipant.class);
 
     private DataSetsConfig dataSetsConfig;
+    private MigrationConfig migrationConfig;
 
-    public DataSetsMigrationParticipant(DataSetsConfig dataSetsConfig) {
-        this.dataSetsConfig = dataSetsConfig;
+    public DataSetsMigrationParticipant(MigrationConfig migrationConfig, DataSetsConfig dataSetsConfig) {
+        this.dataSetsConfig = requireNonNull(dataSetsConfig);
+        this.migrationConfig = requireNonNull(migrationConfig);
     }
 
     public void setLogger(Logger logger) {
@@ -70,8 +76,18 @@ public class DataSetsMigrationParticipant {
         return null;
     }
 
-    protected DataSetResourcesMigrationListener getMigrationListener() {
-        return new LoggingDataSetResourcesMigrationListener(logger);
+    protected MigrationListener getMigrationListener() {
+        return new Slf4jLoggingMigrationListener(logger) {
+            @Override
+            protected void logMigrationFailed(String msg, DataSetException e) {
+                if (migrationConfig.isAlwaysLogExceptions()) {
+                    Logger logger = getLogger();
+                    logger.error(msg, e);
+                } else {
+                    super.logMigrationFailed(msg, e);
+                }
+            }
+        };
     }
 
 }

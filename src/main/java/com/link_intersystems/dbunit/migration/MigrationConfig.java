@@ -8,9 +8,14 @@ import org.apache.maven.plugin.MojoExecutionException;
 public class MigrationConfig {
 
     private int concurrency = 1;
+    private boolean alwaysLogExceptions = true;
 
     public int getConcurrency() {
         return concurrency;
+    }
+
+    public boolean isAlwaysLogExceptions() {
+        return alwaysLogExceptions;
     }
 
     public void setConcurrency(int concurrency) {
