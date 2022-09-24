@@ -18,7 +18,6 @@ import com.link_intersystems.dbunit.stream.resource.file.DataSetFileLocations;
 import com.link_intersystems.maven.logging.ConcurrentLog;
 import com.link_intersystems.maven.logging.ThreadAwareLog;
 import com.link_intersystems.maven.logging.slf4j.Slf4JMavenLogAdapter;
-import com.link_intersystems.maven.project.MavenProjectResolver;
 import com.link_intersystems.util.config.properties.ConfigProperties;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
@@ -26,13 +25,13 @@ import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.PluginParameterExpressionEvaluator;
 import org.apache.maven.plugin.logging.Log;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluator;
 import org.slf4j.Logger;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Executors;
 
@@ -92,9 +91,6 @@ public class FlywayMigrateMojo extends AbstractMojo {
     @Parameter
     protected MigrationConfig migration = new MigrationConfig();
 
-    @Component
-    private MavenProjectResolver mavenProjectResolver;
-
     @Override
     public void execute() throws MojoExecutionException {
         autoConfigure();
@@ -136,7 +132,27 @@ public class FlywayMigrateMojo extends AbstractMojo {
 
         List<DataSetResource> dataSetResources = getDataSetResources(config);
 
+        logDataSetResources(logger, dataSetResources);
+
         dataSetResourcesMigration.exec(dataSetResources);
+    }
+
+    private void logDataSetResources(Logger logger, List<DataSetResource> dataSetResources) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Found ");
+        sb.append(dataSetResources.size());
+        sb.append(" data set resources to migrate:\n");
+        Iterator<DataSetResource> iterator = dataSetResources.iterator();
+        while (iterator.hasNext()) {
+            DataSetResource dataSetResource = iterator.next();
+            sb.append("\t\u2022 ");
+            sb.append(dataSetResource);
+            if (iterator.hasNext()) {
+                sb.append("\n");
+            }
+        }
+
+        logger.info(sb.toString());
     }
 
 
