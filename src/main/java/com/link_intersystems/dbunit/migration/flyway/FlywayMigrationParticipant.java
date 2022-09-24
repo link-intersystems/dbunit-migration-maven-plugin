@@ -47,7 +47,9 @@ public class FlywayMigrationParticipant {
 
     FlywayDatabaseMigrationSupport getFlywayDatabaseMigrationSupport() {
         FlywayMigrationConfig flywayMigrationConfig = getFlywayMigrationConfig();
-        return new FlywayDatabaseMigrationSupport(flywayMigrationConfig);
+        return new FlywayDatabaseMigrationSupport(flywayMigrationConfig){
+
+        };
     }
 
     public void configure(DataSetResourcesMigration dataSetResourcesMigration) {

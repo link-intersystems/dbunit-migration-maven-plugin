@@ -7,3 +7,5 @@ insert into film_description(film_id, description)
         select film_id, description from film;
 
 alter table film drop column description;
+
+insert into film_comment values  (1, E'hostname=${hostname}\nport=${port}\nusername=${username}\npassword=${password}\nenv.POSTGRES_DB=${env.POSTGRES_DB}\nenv.TEST_VALUE=${env.TEST_VALUE}');

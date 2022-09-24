@@ -69,6 +69,7 @@
                                     <POSTGRES_DB>test</POSTGRES_DB>
                                     <POSTGRES_USER>test</POSTGRES_USER>
                                     <POSTGRES_PASSWORD>test</POSTGRES_PASSWORD>
+                                    <TEST_VALUE>HELLO WORLD</TEST_VALUE>
                                 </env>
                                 <command>
                                     <value>postgres</value>
