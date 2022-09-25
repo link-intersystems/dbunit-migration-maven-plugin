@@ -1,7 +1,7 @@
 package com.link_intersystems.dbunit.migration.flyway;
 
 import com.link_intersystems.dbunit.migration.DataSourceProperties;
-import com.link_intersystems.dbunit.migration.DefaultDataSourceProperties;
+import com.link_intersystems.dbunit.migration.testcontainers.DataSourcePropertiesAdapter;
 import com.link_intersystems.dbunit.testcontainers.JdbcContainer;
 import com.link_intersystems.dbunit.testcontainers.JdbcContainerProperties;
 import com.link_intersystems.dbunit.testcontainers.JdbcContainerSetup;
@@ -31,11 +31,10 @@ public class FlywayJdbcContainerSetup implements JdbcContainerSetup {
                 super.prepareDataSource(dataSource, dataSourceProperties);
                 afterMigrate(dataSource);
             }
+
         };
         JdbcContainerProperties properties = jdbcContainer.getProperties();
-        DefaultDataSourceProperties defaultDataSourceProperties = new DefaultDataSourceProperties();
-        defaultDataSourceProperties.putAll(properties);
-        defaultDataSourceProperties.setEnvironmentProperties(properties.getEnvironment());
-        databaseMigrationSupport.prepareDataSource(jdbcContainer.getDataSource(), defaultDataSourceProperties);
+        DataSourceProperties dataSourceProperties = new DataSourcePropertiesAdapter(properties);
+        databaseMigrationSupport.prepareDataSource(jdbcContainer.getDataSource(), dataSourceProperties);
     }
 }

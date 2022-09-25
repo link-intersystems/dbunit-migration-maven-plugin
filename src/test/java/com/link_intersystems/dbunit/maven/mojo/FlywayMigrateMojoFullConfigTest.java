@@ -1,6 +1,5 @@
 package com.link_intersystems.dbunit.maven.mojo;
 
-import com.link_intersystems.dbunit.dataset.DataSetBuilder;
 import com.link_intersystems.dbunit.maven.MavenTestProjectAssertions;
 import com.link_intersystems.dbunit.maven.MigratedDataSetAssertion;
 import com.link_intersystems.dbunit.meta.TableMetaDataBuilder;
@@ -15,7 +14,6 @@ import org.apache.maven.project.MavenProject;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.DefaultTable;
 import org.dbunit.dataset.ITable;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -59,7 +57,7 @@ class FlywayMigrateMojoFullConfigTest {
 
             Properties comment = getComment(filmCommentWithId, "1");
 
-            assertEquals("localhost", comment.getProperty("hostname"));
+            assertEquals("localhost", comment.getProperty("host"));
             assertEquals("test", comment.getProperty("username"));
             assertEquals("test", comment.getProperty("username"));
             assertEquals("test", comment.getProperty("env.POSTGRES_DB"));

@@ -27,6 +27,9 @@
                             <new_last_name_column_name>
                                 lastname
                             </new_last_name_column_name>
+                            <mapped_hostname>
+                                {{host}}
+                            </mapped_hostname>
                         </placeholders>
                     </flyway>
                     <dataSets>
