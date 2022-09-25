@@ -27,6 +27,9 @@
                             <new_last_name_column_name>
                                 lastname
                             </new_last_name_column_name>
+                            <mapped_hostname>
+                                {{host}}
+                            </mapped_hostname>
                         </placeholders>
                     </flyway>
                     <dataSets>
@@ -69,6 +72,7 @@
                                     <POSTGRES_DB>test</POSTGRES_DB>
                                     <POSTGRES_USER>test</POSTGRES_USER>
                                     <POSTGRES_PASSWORD>test</POSTGRES_PASSWORD>
+                                    <TEST_VALUE>HELLO WORLD</TEST_VALUE>
                                 </env>
                                 <command>
                                     <value>postgres</value>

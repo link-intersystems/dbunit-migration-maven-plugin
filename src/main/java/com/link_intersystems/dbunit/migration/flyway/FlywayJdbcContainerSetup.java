@@ -1,6 +1,9 @@
 package com.link_intersystems.dbunit.migration.flyway;
 
+import com.link_intersystems.dbunit.migration.DataSourceProperties;
+import com.link_intersystems.dbunit.migration.testcontainers.DataSourcePropertiesAdapter;
 import com.link_intersystems.dbunit.testcontainers.JdbcContainer;
+import com.link_intersystems.dbunit.testcontainers.JdbcContainerProperties;
 import com.link_intersystems.dbunit.testcontainers.JdbcContainerSetup;
 
 import javax.sql.DataSource;
@@ -24,11 +27,14 @@ public class FlywayJdbcContainerSetup implements JdbcContainerSetup {
         flywayMigrationConfig.setRemoveFlywayTables(true);
         FlywayDatabaseMigrationSupport databaseMigrationSupport = new FlywayDatabaseMigrationSupport(flywayMigrationConfig) {
             @Override
-            public void prepareDataSource(DataSource dataSource) throws SQLException {
-                super.prepareDataSource(dataSource);
+            public void prepareDataSource(DataSource dataSource, DataSourceProperties dataSourceProperties) throws SQLException {
+                super.prepareDataSource(dataSource, dataSourceProperties);
                 afterMigrate(dataSource);
             }
+
         };
-        databaseMigrationSupport.prepareDataSource(jdbcContainer.getDataSource());
+        JdbcContainerProperties properties = jdbcContainer.getProperties();
+        DataSourceProperties dataSourceProperties = new DataSourcePropertiesAdapter(properties);
+        databaseMigrationSupport.prepareDataSource(jdbcContainer.getDataSource(), dataSourceProperties);
     }
 }
