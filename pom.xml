@@ -11,7 +11,7 @@
     <groupId>com.link-intersystems.dbunit.maven</groupId>
     <artifactId>dbunit-migration-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
-    <version>1.0.5-SNAPSHOT</version>
+    <version>1.0.5</version>
 
     <properties>
         <lis-commons.version>1.8.2</lis-commons.version>
@@ -324,7 +324,7 @@
         <connection>scm:git:https://github.com/link-intersystems/dbunit-migration-maven-plugin.git</connection>
         <developerConnection>scm:git:https://github.com/link-intersystems/dbunit-migration-maven-plugin.git</developerConnection>
         <url>https://github.com/link-intersystems/dbunit-migration-maven-plugin</url>
-        <tag>dbunit-migration-maven-plugin-1.0.4</tag>
+        <tag>dbunit-migration-maven-plugin-1.0.5</tag>
     </scm>
 
     <distributionManagement>
